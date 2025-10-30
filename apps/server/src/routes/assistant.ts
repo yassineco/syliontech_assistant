@@ -4,6 +4,8 @@ import { processAssistantRequest } from '../services/mock.js';
 import { processGeminiRequest, isGeminiAvailable } from '../services/gemini.js';
 import { logUserMessage, logAssistantReply, logSessionStart } from '../services/audit.js';
 import { env } from '../config/env.js';
+import { generateAnswer, detectIntention } from '../services/llm.js';
+import { searchIndex } from '../rag/index.js';
 
 // ==========================================
 // ROUTE /api/assistant - ASSISTANT IA
@@ -91,24 +93,116 @@ const assistantRoute: FastifyPluginAsync = async (fastify) => {
         fastify.log.warn({ error: auditError }, 'Erreur audit message utilisateur');
       }
       
-      // Traitement selon le mode (MOCK ou LIVE)
+      // Traitement avec intégration RAG
       let response: AssistantReply;
       
-      if (env.USE_MOCK) {
-        fastify.log.info('🎭 Mode MOCK - Utilisation du service déterministe');
-        response = await processAssistantRequest(assistantRequest);
-      } else {
-        if (!isGeminiAvailable()) {
-          fastify.log.error('❌ Mode LIVE demandé mais Gemini indisponible');
-          return reply.code(503).send({
-            intent: 'error',
-            slots: {},
-            reply: 'L\'assistant IA est en maintenance. Veuillez réessayer plus tard.',
-          });
+      // 1. Détection d'intention pour orienter le traitement
+      const intention = detectIntention(assistantRequest.message);
+      fastify.log.info(`🧠 Intention détectée: ${intention}`);
+      
+      try {
+        if (intention === 'faq') {
+          // 2. Questions FAQ -> Utiliser le système RAG
+          fastify.log.info('📚 Mode RAG - Recherche dans la base de connaissances');
+          
+          // Recherche vectorielle dans l'index RAG
+          const ragResult = await searchIndex(assistantRequest.message, 3);
+          
+          if (ragResult.chunks.length === 0) {
+            // Aucun résultat trouvé dans la base de connaissances
+            response = {
+              intent: 'information',
+              slots: assistantRequest.slots || {},
+              reply: 'Je n\'ai pas trouvé d\'information pertinente dans ma base de connaissances pour répondre à votre question. Pouvez-vous la reformuler ou me poser une question sur les crédits Sofinco ?',
+              offers: [],
+              nextAction: 'clarify',
+              confidence: 0.3
+            };
+          } else {
+            // Génération de la réponse avec les chunks trouvés
+            const ragResponse = await generateAnswer(assistantRequest.message, ragResult.chunks);
+            
+            response = {
+              intent: 'information',
+              slots: assistantRequest.slots || {},
+              reply: ragResponse.reply,
+              offers: [],
+              nextAction: 'continue',
+              confidence: ragResponse.confidence || 0.8,
+              // Ajout des citations pour l'UI
+              ...(ragResponse.citations && { citations: ragResponse.citations })
+            };
+          }
+          
+        } else if (intention === 'simulation') {
+          // 3. Demandes de simulation -> Services existants
+          fastify.log.info('🧮 Mode Simulation - Utilisation des services de crédit');
+          
+          if (env.USE_MOCK) {
+            response = await processAssistantRequest(assistantRequest);
+          } else {
+            if (!isGeminiAvailable()) {
+              throw new Error('Gemini indisponible pour simulation');
+            }
+            response = await processGeminiRequest(assistantRequest);
+          }
+          
+        } else {
+          // 4. Autres intentions -> Services existants avec fallback RAG
+          fastify.log.info('🔄 Mode Hybride - Services existants avec possibilité RAG');
+          
+          if (env.USE_MOCK) {
+            response = await processAssistantRequest(assistantRequest);
+          } else {
+            if (!isGeminiAvailable()) {
+              fastify.log.warn('⚠️ Gemini indisponible, tentative avec RAG');
+              // Fallback vers RAG en cas d'indisponibilité
+              const ragResult = await searchIndex(assistantRequest.message, 2);
+              
+              if (ragResult.chunks.length === 0) {
+                response = {
+                  intent: 'error',
+                  slots: {},
+                  reply: 'Je ne peux pas traiter votre demande actuellement. Veuillez réessayer plus tard.',
+                  offers: [],
+                  nextAction: 'retry',
+                  confidence: 0.2
+                };
+              } else {
+                const ragResponse = await generateAnswer(assistantRequest.message, ragResult.chunks);
+                
+                response = {
+                  intent: 'information',
+                  slots: assistantRequest.slots || {},
+                  reply: ragResponse.reply,
+                  offers: [],
+                  nextAction: 'continue',
+                  confidence: 0.6,
+                  ...(ragResponse.citations && { citations: ragResponse.citations })
+                };
+              }
+            } else {
+              response = await processGeminiRequest(assistantRequest);
+            }
+          }
         }
         
-        fastify.log.info('🤖 Mode LIVE - Utilisation de Vertex AI Gemini');
-        response = await processGeminiRequest(assistantRequest);
+      } catch (ragError) {
+        fastify.log.error({ error: ragError }, 'Erreur traitement RAG, fallback vers services existants');
+        
+        // Fallback vers les services existants en cas d'erreur RAG
+        if (env.USE_MOCK) {
+          response = await processAssistantRequest(assistantRequest);
+        } else {
+          if (!isGeminiAvailable()) {
+            return reply.code(503).send({
+              intent: 'error',
+              slots: {},
+              reply: 'L\'assistant IA est temporairement indisponible. Veuillez réessayer plus tard.',
+            });
+          }
+          response = await processGeminiRequest(assistantRequest);
+        }
       }
       
       // Log de la réponse assistant

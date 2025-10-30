@@ -344,3 +344,5 @@ export async function ragRoutes(fastify: FastifyInstance) {
     }
   });
 }
+
+export default ragRoutes;

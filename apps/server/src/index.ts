@@ -3,6 +3,9 @@ import cors from '@fastify/cors';
 import { env } from './config/env.js';
 import assistantRoute from './routes/assistant.js';
 import simulateRoute from './routes/simulate.js';
+import ragRoute from './routes/rag.js';
+import { buildIndexFromFolder } from './rag/index.js';
+import path from 'path';
 
 // ==========================================
 // SERVEUR FASTIFY - SOFINCO ASSISTANT API
@@ -131,6 +134,22 @@ async function createServer() {
 
   // Routes de simulation
   await fastify.register(simulateRoute);
+
+  // Routes RAG
+  await fastify.register(ragRoute);
+
+  // ==========================================
+  // INITIALISATION SYSTÈME RAG
+  // ==========================================
+
+  try {
+    fastify.log.info('🧠 Initialisation du système RAG...');
+    const knowledgeDir = path.join(process.cwd(), 'knowledge');
+    const stats = await buildIndexFromFolder(knowledgeDir);
+    fastify.log.info(`✅ Index RAG construit: ${stats.totalDocs} documents, ${stats.totalChunks} chunks`);
+  } catch (ragError) {
+    fastify.log.warn({ error: ragError }, '⚠️ Erreur initialisation RAG - Fonctionnement en mode dégradé');
+  }
 
   // ==========================================
   // GESTION D'ERREURS GLOBALE

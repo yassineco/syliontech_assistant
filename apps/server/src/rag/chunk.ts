@@ -9,7 +9,7 @@ import type { DocChunk } from './types.js';
  */
 const CHUNK_CONFIG = {
   maxTokens: 800, // Taille maximale d'un chunk en tokens (approximatif)
-  minTokens: 200, // Taille minimale d'un chunk
+  minTokens: 50, // Taille minimale d'un chunk (réduite pour FAQ courtes)
   overlapTokens: 100, // Chevauchement entre chunks
   wordsPerToken: 0.75, // Approximation: 1 token ≈ 0.75 mots en français
 };
@@ -106,7 +106,12 @@ function splitTextIntoChunks(text: string, maxTokens: number, overlapTokens: num
     chunks.push(currentChunk.trim());
   }
 
-  return chunks.filter(chunk => estimateTokens(chunk) >= CHUNK_CONFIG.minTokens);
+  const filteredChunks = chunks.filter(chunk => {
+    const tokens = estimateTokens(chunk);
+    return tokens >= CHUNK_CONFIG.minTokens;
+  });
+  
+  return filteredChunks;
 }
 
 /**
@@ -145,7 +150,7 @@ export function chunkMarkdown(
     const sectionText = `${section.title}\n\n${section.content}`;
     const textChunks = splitTextIntoChunks(sectionText, CHUNK_CONFIG.maxTokens, CHUNK_CONFIG.overlapTokens);
     
-    textChunks.forEach((textChunk) => {
+    textChunks.forEach((textChunk, idx) => {
       chunks.push({
         id: `${docId}_${chunkIndex++}`,
         docId,
@@ -182,7 +187,7 @@ export function cleanMarkdownText(markdown: string): string {
  */
 export function validateChunk(chunk: DocChunk): boolean {
   // Vérifier la taille minimale
-  if (!chunk.text || chunk.text.trim().length < 50) {
+  if (!chunk.text || chunk.text.trim().length < 30) {
     return false;
   }
 
@@ -193,7 +198,7 @@ export function validateChunk(chunk: DocChunk): boolean {
 
   // Vérifier qu'il y a du contenu informatif
   const words = chunk.text.trim().split(/\s+/).length;
-  if (words < 20) {
+  if (words < 10) {
     return false;
   }
 
