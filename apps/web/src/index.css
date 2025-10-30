@@ -1,0 +1,171 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Variables CSS personnalisées basées sur le thème Sofinco */
+:root {
+  /* Couleurs principales */
+  --color-primary: #00a86b;
+  --color-primary-dark: #008a5a;
+  --color-primary-light: #e8f5f0;
+  --color-secondary: #1f2937;
+  --color-muted: #f5f7f9;
+  --color-border: #e5e7eb;
+  --color-card: #ffffff;
+  --color-card-hover: #fafbfc;
+  --color-text: #111827;
+  --color-text-muted: #6b7280;
+  --color-background: #ffffff;
+  --color-surface: #f8fafc;
+  
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Base styles */
+* {
+  border-color: var(--color-border);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Components utilitaires */
+@layer components {
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-600 text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary-100 hover:bg-secondary-200 text-secondary-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2;
+  }
+  
+  .btn-outline {
+    @apply border border-border hover:bg-muted text-text font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .card {
+    @apply bg-card border border-border rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200;
+  }
+  
+  .card-hover {
+    @apply hover:bg-card-hover;
+  }
+  
+  .input {
+    @apply border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
+  }
+  
+  .label {
+    @apply text-sm font-medium text-text-muted mb-1 block;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-600 to-accent bg-clip-text text-transparent;
+  }
+}
+
+/* Animations */
+@layer utilities {
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Scroll personnalisé */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Focus visible pour l'accessibilité */
+.focus-visible:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Messages chat */
+.chat-message {
+  @apply max-w-xs md:max-w-md lg:max-w-lg;
+}
+
+.chat-message.user {
+  @apply bg-primary text-primary-foreground ml-auto;
+}
+
+.chat-message.assistant {
+  @apply bg-card border border-border mr-auto;
+}
+
+/* États du micro */
+.mic-button {
+  @apply relative overflow-hidden;
+}
+
+.mic-button.listening::before {
+  content: '';
+  @apply absolute inset-0 bg-primary opacity-20 animate-ping rounded-full;
+}
+
+.mic-button.thinking {
+  @apply animate-pulse;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .chat-message {
+    @apply max-w-[85%];
+  }
+}

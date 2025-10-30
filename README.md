@@ -1,23 +1,24 @@
-# 🚀 Magic Button RAG System
-## Assistant IA Intelligent avec Traduction Multilingue
+# Sofinco Assistant - Prototype IA
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/yassineco/MB)
-[![Status](https://img.shields.io/badge/status-Production%20Ready-green.svg)](https://magic-button-api-374140035541.europe-west1.run.app/health)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+> **Prototype — Non contractuel. Données fictives.**
 
-**📊 Status :** ✅ Production-ready avec Vertex AI activé  
-**📅 Dernière mise à jour :** 25 octobre 2025  
-**🔗 Rapports :** [Index des rapports](./INDEX_RAPPORTS.md) | [Rapport consolidé](./RAPPORT_CONSOLIDE_25OCT2025.md)
+Un assistant conversationnel intelligent pour faciliter les demandes de crédit personnel, avec interface vocale et visuelle.
 
----
+![Version](https://img.shields.io/badge/version-1.0.0-green)
+![Status](https://img.shields.io/badge/status-prototype-orange)
+![Mode](https://img.shields.io/badge/mode-demo--mock-blue)
 
-## 🎯 **Vue d'ensemble**
+## 🎯 Présentation
 
-Magic Button est un **système d'assistance IA complet** qui combine :
-- 🌍 **Traduction multilingue** intelligente (5 langues) ✅
-- 🧠 **RAG (Retrieval-Augmented Generation)** avec réponses contextuelles ✅
-- 🎨 **Extension Chrome** moderne et intuitive ✅
-- ⚡ **API Cloud-native** haute performance
+Ce prototype démontre les capacités d'un assistant IA pour le secteur du crédit personnel, développé sur la base du projet **Magic Button** et adapté aux besoins spécifiques de simulation de crédit.
+
+### ✨ Fonctionnalités
+
+- **🎤 Interface vocale** : Reconnaissance et synthèse vocale (Web Speech API)
+- **💬 Assistant conversationnel** : IA contextuelle pour guider l'utilisateur
+- **🧮 Simulateur de crédit** : Calculs financiers en temps réel
+- **📋 Offres personnalisées** : Propositions adaptées au profil
+- **🎨 UI Sofinco-like** : Interface inspirée du site officiel (sans éléments propriétaires)
 
 ### ✨ **Fonctionnalités principales**
 

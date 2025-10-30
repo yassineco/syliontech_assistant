@@ -1,47 +1,45 @@
 {
-  "name": "magic-button",
+  "name": "sofinco-assistant",
   "version": "1.0.0",
-  "description": "Chrome Extension MV3 + GCP Vertex AI - Assistant IA intelligent",
+  "description": "Prototype Sofinco Assistant IA - Web Demo avec Assistant Vocal/Visuel",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
   "scripts": {
-    "install:all": "npm install && npm run install:backend && npm run install:extension",
-    "install:backend": "cd backend && npm install",
-    "install:extension": "cd extension && npm install",
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:extension\"",
-    "dev:backend": "cd backend && npm run dev",
-    "dev:extension": "cd extension && npm run dev",
-    "build": "npm run build:backend && npm run build:extension",
-    "build:backend": "cd backend && npm run build",
-    "build:extension": "cd extension && npm run build",
-    "test": "npm run test:backend && npm run test:extension",
-    "test:backend": "cd backend && npm run test",
-    "test:extension": "cd extension && npm run test",
-    "test:coverage": "npm run test:backend:coverage",
-    "test:backend:coverage": "cd backend && npm run test:coverage",
-    "lint": "npm run lint:backend && npm run lint:extension",
-    "lint:backend": "cd backend && npm run lint",
-    "lint:extension": "cd extension && npm run lint",
-    "type-check": "npm run type-check:backend && npm run type-check:extension",
-    "type-check:backend": "cd backend && npm run type-check",
-    "type-check:extension": "cd extension && npm run type-check",
-    "deploy:backend": "cd backend && npm run deploy",
-    "deploy:infra": "cd infra/terraform && terraform apply",
-    "bootstrap:gcp": "./scripts/bootstrap-gcp.sh",
-    "clean": "rm -rf node_modules backend/node_modules extension/node_modules backend/dist extension/dist"
+    "dev:web": "pnpm --filter @sofinco/web dev",
+    "dev:server": "pnpm --filter @sofinco/server dev",
+    "dev": "concurrently \"pnpm dev:server\" \"pnpm dev:web\"",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "type-check": "pnpm -r type-check",
+    "clean": "pnpm -r clean && rm -rf node_modules",
+    "setup": "pnpm install"
   },
   "keywords": [
-    "chrome-extension",
+    "sofinco",
+    "assistant-ia",
     "vertex-ai",
-    "gcp",
-    "ai",
     "gemini",
-    "rag"
+    "web-speech-api",
+    "fastify",
+    "react",
+    "typescript"
   ],
   "author": "Yassine",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.1.1"
   },
   "engines": {
-    "node": ">=18.0.0"
-  }
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0"
 }
