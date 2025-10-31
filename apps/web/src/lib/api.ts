@@ -163,8 +163,8 @@ class ApiClient {
     const payload: AssistantRequest = {
       sessionId: this.sessionId,
       message,
-      context,
-      slots,
+      ...(context && { context }),
+      ...(slots && { slots }),
     };
 
     return this.request<AssistantReply>('/assistant', {

@@ -57,11 +57,28 @@ const GeminiResponseSchema = z.object({
 export function detectIntention(query: string): 'simulation' | 'faq' | 'other' {
   const lowerQuery = query.toLowerCase();
   
-  // Mots-clés pour simulation
+  // Mots-clés pour questions FAQ (prioritaires)
+  const faqKeywords = [
+    'comment', 'pourquoi', 'qu\'est-ce', 'quelle', 'quel', 'quels', 'quelles',
+    'qui peut', 'conditions', 'documents', 'justificatifs', 'délai', 'délais',
+    'procédure', 'étapes', 'comment faire', 'c\'est quoi', 'différence',
+    'avantages', 'inconvénients', 'éligible', 'éligibilité', 'autorisé'
+  ];
+  
+  // Vérifier d'abord les questions FAQ
+  const hasFaqKeywords = faqKeywords.some(keyword => 
+    lowerQuery.includes(keyword)
+  );
+  
+  if (hasFaqKeywords) {
+    return 'faq';
+  }
+  
+  // Mots-clés pour simulation (actions concrètes)
   const simulationKeywords = [
-    'simuler', 'simulation', 'mensualité', 'taeg', 'prêt', 'crédit',
-    'emprunter', 'financer', 'combien', 'calculer', 'taux',
-    '€', 'euros', 'mois', 'durée', 'remboursement'
+    'simuler', 'simulation', 'mensualité', 'calculer',
+    'emprunter', 'financer', 'je veux', 'je voudrais',
+    'j\'ai besoin', 'besoin de'
   ];
   
   // Vérifier si la requête contient des mots-clés de simulation
@@ -72,15 +89,17 @@ export function detectIntention(query: string): 'simulation' | 'faq' | 'other' {
   // Vérifier si la requête contient des chiffres (montant ou durée)
   const hasNumbers = /\d+/.test(query);
   
+  // Si mots-clés de simulation + chiffres = simulation claire
   if (hasSimulationKeywords && hasNumbers) {
     return 'simulation';
   }
   
+  // Si juste des mots-clés de simulation sans chiffres
   if (hasSimulationKeywords) {
     return 'simulation';
   }
   
-  // Si pas de mots-clés de simulation, considérer comme FAQ
+  // Par défaut, considérer comme FAQ
   return 'faq';
 }
 

@@ -96,6 +96,10 @@ const assistantRoute: FastifyPluginAsync = async (fastify) => {
       // Traitement avec intégration RAG
       let response: AssistantReply;
       
+      // DEBUG: Afficher le message reçu
+      console.log(`📥 Message reçu dans assistant.ts: "${assistantRequest.message}"`);
+      console.log(`📦 AssistantRequest complet:`, JSON.stringify(assistantRequest, null, 2));
+      
       // 1. Détection d'intention pour orienter le traitement
       const intention = detectIntention(assistantRequest.message);
       fastify.log.info(`🧠 Intention détectée: ${intention}`);
