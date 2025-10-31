@@ -42,6 +42,46 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Animations personnalisées pour l'interaction vocale */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(40px) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-20px) translateX(50px) rotate(180deg);
+    opacity: 0.6;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.8);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
 /* Components utilitaires */
 @layer components {
   .btn-primary {

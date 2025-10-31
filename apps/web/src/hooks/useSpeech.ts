@@ -158,13 +158,37 @@ export function useSpeech(): UseSpeechReturn {
     const voices = speechSynthesis.getVoices();
     setAvailableVoices(voices);
     
-    // Sélectionne une voix française par défaut
-    const frenchVoice = voices.find(voice => 
-      voice.lang.startsWith('fr') && voice.name.includes('Female')
-    ) || voices.find(voice => voice.lang.startsWith('fr'));
+    // Sélectionne la meilleure voix française disponible
+    // Priorité : Google Premium > Microsoft Neural > Autres
+    const frenchVoice = 
+      // 1. Voix Google Premium (très naturelles)
+      voices.find(voice => 
+        voice.lang.startsWith('fr') && 
+        (voice.name.includes('Google') || voice.name.includes('premium')) &&
+        (voice.name.includes('Female') || voice.name.includes('Amélie') || voice.name.includes('Clara'))
+      ) ||
+      // 2. Voix Microsoft Neural (qualité élevée)
+      voices.find(voice => 
+        voice.lang.startsWith('fr') && 
+        voice.name.includes('Microsoft') &&
+        (voice.name.includes('Denise') || voice.name.includes('Neural'))
+      ) ||
+      // 3. Voix Apple (bonne qualité sur Safari/Mac)
+      voices.find(voice => 
+        voice.lang.startsWith('fr') && 
+        (voice.name.includes('Amélie') || voice.name.includes('Thomas'))
+      ) ||
+      // 4. N'importe quelle voix française féminine
+      voices.find(voice => 
+        voice.lang.startsWith('fr') && 
+        (voice.name.includes('Female') || voice.name.includes('femme'))
+      ) ||
+      // 5. Fallback : première voix française
+      voices.find(voice => voice.lang.startsWith('fr'));
     
     if (frenchVoice && !currentVoice) {
       setCurrentVoice(frenchVoice);
+      console.log('🎤 Voix sélectionnée:', frenchVoice.name, '-', frenchVoice.lang);
     }
   }, [isSupported, currentVoice]);
 
@@ -219,9 +243,11 @@ export function useSpeech(): UseSpeechReturn {
           utterance.voice = currentVoice;
         }
         utterance.lang = language;
-        utterance.rate = 0.9; // Légèrement plus lent pour la clarté
-        utterance.pitch = 1;
-        utterance.volume = 0.8;
+        
+        // Paramètres optimisés pour une voix plus naturelle
+        utterance.rate = 0.95;  // Légèrement ralenti pour plus de clarté
+        utterance.pitch = 1.05; // Légèrement plus aigu pour un ton plus agréable
+        utterance.volume = 0.9; // Volume un peu plus fort
         
         utterance.onstart = () => {
           setState('speaking');
