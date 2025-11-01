@@ -1,0 +1,86 @@
+{
+  "name": "sofinco-official-theme",
+  "description": "Thème basé sur le design officiel Sofinco.fr",
+  "colors": {
+    "primary": {
+      "DEFAULT": "#007bc4",
+      "50": "#e6f3ff",
+      "100": "#cce7ff",
+      "200": "#99cfff",
+      "300": "#66b7ff",
+      "400": "#339fff",
+      "500": "#007bc4",
+      "600": "#0062a3",
+      "700": "#004982",
+      "800": "#003061",
+      "900": "#001740",
+      "foreground": "#ffffff"
+    },
+    "primaryMuted": "#e6f3ff",
+    "accent": "#00bcd4",
+    "secondary": {
+      "DEFAULT": "#e91e63",
+      "50": "#fce4ec",
+      "100": "#f8bbd9",
+      "200": "#f48fb1",
+      "300": "#f06292",
+      "400": "#ec407a",
+      "500": "#e91e63",
+      "600": "#d81b60",
+      "700": "#c2185b",
+      "800": "#ad1457",
+      "900": "#880e4f",
+      "foreground": "#ffffff"
+    },
+    "muted": "#f5f5f5",
+    "border": "#e0e0e0",
+    "card": "#ffffff",
+    "cardHover": "#fafafa",
+    "text": {
+      "DEFAULT": "#333333",
+      "muted": "#757575",
+      "light": "#9e9e9e"
+    },
+    "background": "#ffffff",
+    "surface": "#fafafa",
+    "success": "#4caf50",
+    "warning": "#ff9800",
+    "error": "#f44336",
+    "info": "#007bc4"
+  },
+  "radius": {
+    "sm": "4px",
+    "md": "8px",
+    "lg": "12px",
+    "xl": "16px"
+  },
+  "shadows": {
+    "sm": "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)",
+    "md": "0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)",
+    "lg": "0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)"
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": ["-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"]
+    },
+    "fontSize": {
+      "xs": "0.75rem",
+      "sm": "0.875rem",
+      "base": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem"
+    }
+  },
+  "spacing": {
+    "xs": "0.25rem",
+    "sm": "0.5rem",
+    "md": "1rem",
+    "lg": "1.5rem",
+    "xl": "2rem",
+    "2xl": "3rem",
+    "3xl": "4rem"
+  }
+}

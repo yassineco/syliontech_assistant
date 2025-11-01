@@ -38,50 +38,140 @@ export function TopNav({ onNavigate, currentView = 'simulator' }: TopNavProps) {
   };
 
   return (
-    <nav className="bg-white border-b border-border sticky top-0 z-50 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <nav style={{
+      backgroundColor: 'white',
+      borderBottom: '1px solid #e0e0e0',
+      position: 'sticky',
+      top: 0,
+      zIndex: 50,
+      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12)'
+    }}>
+      <div style={{ 
+        maxWidth: '1280px', 
+        margin: '0 auto', 
+        padding: '0 16px' 
+      }}>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          height: '64px' 
+        }}>
           {/* Logo / Titre */}
-          <div className="flex items-center space-x-2">
-            <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Calculator className="w-5 h-5 text-white" />
-              </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              backgroundColor: '#007bc4',
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <Calculator style={{ width: '20px', height: '20px', color: 'white' }} />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-text">Assistant Crédit</h1>
-              <p className="text-xs text-text-muted">Prototype de démonstration</p>
+              <h1 style={{
+                fontSize: '18px',
+                fontWeight: '700',
+                color: '#007bc4',
+                margin: 0,
+                lineHeight: 1
+              }}>
+                Assistant Crédit Sofinco
+              </h1>
+              <p style={{
+                fontSize: '11px',
+                color: '#757575',
+                margin: 0,
+                lineHeight: 1
+              }}>
+                Prototype de démonstration
+              </p>
             </div>
           </div>
 
           {/* Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '32px'
+          }}>
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className={`font-medium transition-colors duration-200 ${
-                  currentView === item.id
-                    ? 'text-primary border-b-2 border-primary pb-1'
-                    : 'text-text-muted hover:text-primary'
-                }`}
+                style={{
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontWeight: '500',
+                  fontSize: '14px',
+                  color: currentView === item.id ? '#007bc4' : '#757575',
+                  borderBottom: currentView === item.id ? '2px solid #007bc4' : 'none',
+                  paddingBottom: currentView === item.id ? '4px' : '0',
+                  transition: 'all 0.2s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
                 title={item.description}
+                onMouseEnter={(e) => {
+                  if (currentView !== item.id) {
+                    e.currentTarget.style.color = '#007bc4';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (currentView !== item.id) {
+                    e.currentTarget.style.color = '#757575';
+                  }
+                }}
               >
-                <item.icon className="w-4 h-4 inline mr-2" />
+                <item.icon style={{ width: '16px', height: '16px' }} />
                 {item.label}
               </button>
             ))}
           </div>
 
           {/* Actions */}
-          <div className="flex items-center space-x-3">
-            <button className="p-2 text-text-muted hover:text-primary rounded-lg hover:bg-muted transition-colors duration-200">
-              <Headphones className="w-5 h-5" />
-              <span className="sr-only">Assistant vocal</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button style={{
+              padding: '8px',
+              backgroundColor: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              borderRadius: '8px',
+              color: '#757575',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#f5f5f5';
+              e.currentTarget.style.color = '#007bc4';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = '#757575';
+            }}>
+              <Headphones style={{ width: '20px', height: '20px' }} />
             </button>
-            <button className="p-2 text-text-muted hover:text-primary rounded-lg hover:bg-muted transition-colors duration-200">
-              <HelpCircle className="w-5 h-5" />
-              <span className="sr-only">Aide</span>
+            <button style={{
+              padding: '8px',
+              backgroundColor: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              borderRadius: '8px',
+              color: '#757575',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#f5f5f5';
+              e.currentTarget.style.color = '#007bc4';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = '#757575';
+            }}>
+              <HelpCircle style={{ width: '20px', height: '20px' }} />
             </button>
           </div>
         </div>

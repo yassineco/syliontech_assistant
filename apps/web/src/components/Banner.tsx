@@ -2,20 +2,42 @@ import React from 'react';
 import { AlertTriangle } from 'lucide-react';
 
 /**
- * Bannière légale obligatoire pour le prototype
+ * Bannière légale obligatoire pour le prototype - Style Sofinco
  */
 export function Banner() {
   return (
-    <div className="bg-warning-50 border-l-4 border-warning-400 p-4 mb-6 rounded-lg">
+    <div style={{
+      backgroundColor: '#fff3cd',
+      borderLeft: '4px solid #ff9800',
+      padding: '16px',
+      marginBottom: '24px',
+      borderRadius: '8px',
+      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12)'
+    }}>
       <div className="flex items-start">
         <div className="flex-shrink-0">
-          <AlertTriangle className="h-5 w-5 text-warning-400" aria-hidden="true" />
+          <AlertTriangle style={{ 
+            height: '20px', 
+            width: '20px', 
+            color: '#ff9800' 
+          }} aria-hidden="true" />
         </div>
         <div className="ml-3">
-          <p className="text-sm text-warning-800 font-medium">
+          <p style={{
+            fontSize: '14px',
+            color: '#8a4700',
+            fontWeight: '600',
+            margin: '0'
+          }}>
             <strong>Prototype — Non contractuel</strong>
           </p>
-          <p className="text-xs text-warning-700 mt-1">
+          <p style={{
+            fontSize: '12px',
+            color: '#8a4700',
+            marginTop: '4px',
+            margin: '4px 0 0 0',
+            lineHeight: '1.4'
+          }}>
             Simulation à des fins de démonstration uniquement. Données fictives. 
             Aucun engagement contractuel. Pour une offre réelle, consultez un conseiller Sofinco.
           </p>

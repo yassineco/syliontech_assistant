@@ -10,7 +10,7 @@ import type { Offer } from '../lib/api';
 
 type ViewMode = 'simulator' | 'offers' | 'assistant';
 
-export function DemoPage() {
+export function DemoPageSofinco() {
   const [currentView, setCurrentView] = useState<ViewMode>('simulator');
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(false);
@@ -25,7 +25,6 @@ export function DemoPage() {
       setCurrentView('offers');
     } catch (error) {
       console.error('Erreur simulation:', error);
-      // TODO: Gérer l'erreur avec un toast
     } finally {
       setLoading(false);
     }
@@ -33,7 +32,6 @@ export function DemoPage() {
 
   const handleOfferSelect = useCallback((offer: Offer) => {
     console.log('Offre sélectionnée:', offer);
-    // TODO: Gérer la sélection d'offre
   }, []);
 
   const handleAssistantMessage = useCallback(async (
@@ -166,94 +164,8 @@ export function DemoPage() {
 
         {/* Mode Assistant */}
         {currentView === 'assistant' && (
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-[calc(100vh-200px)]">
-              {/* Panel principal de l'assistant */}
-              <div className="lg:col-span-2">
-                <AssistantPanel onMessage={handleAssistantMessage} />
-              </div>
-
-              {/* Sidebar avec infos contextuelles */}
-              <div className="space-y-6">
-                {/* Résumé simulation */}
-                {lastSimulation && (
-                  <div className="card p-6">
-                    <h3 className="font-semibold text-text mb-4">Dernière simulation</h3>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-text-muted">Montant</span>
-                        <span className="text-text font-medium">
-                          {lastSimulation.amount.toLocaleString()} €
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-text-muted">Durée</span>
-                        <span className="text-text font-medium">
-                          {lastSimulation.duration} mois
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-text-muted">Projet</span>
-                        <span className="text-text font-medium">
-                          {lastSimulation.project}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    {offers.length > 0 && (
-                      <button
-                        onClick={() => setCurrentView('offers')}
-                        className="btn-outline w-full mt-4 text-sm"
-                      >
-                        Voir les offres ({offers.length})
-                      </button>
-                    )}
-                  </div>
-                )}
-
-                {/* Aide */}
-                <div className="card p-6">
-                  <h3 className="font-semibold text-text mb-4">Questions fréquentes</h3>
-                  <div className="space-y-3">
-                    {[
-                      'Quels sont les documents nécessaires ?',
-                      'Comment fonctionne le TAEG ?',
-                      'Puis-je rembourser par anticipation ?',
-                      'Quelles sont les conditions d\'éligibilité ?'
-                    ].map((question, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleAssistantMessage(question)}
-                        className="text-left w-full p-3 text-sm text-text-muted hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
-                      >
-                        {question}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Raccourcis */}
-                <div className="card p-6">
-                  <h3 className="font-semibold text-text mb-4">Actions rapides</h3>
-                  <div className="space-y-2">
-                    <button
-                      onClick={() => setCurrentView('simulator')}
-                      className="btn-outline w-full text-sm"
-                    >
-                      Nouvelle simulation
-                    </button>
-                    {offers.length > 0 && (
-                      <button
-                        onClick={() => setCurrentView('offers')}
-                        className="btn-primary w-full text-sm"
-                      >
-                        Mes offres
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <AssistantPanel onMessage={handleAssistantMessage} />
           </div>
         )}
       </main>
