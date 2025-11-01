@@ -29,7 +29,7 @@ async function createServer() {
 
   // CORS pour permettre les requêtes depuis le frontend
   await fastify.register(cors, {
-    origin: env.CORS_ORIGIN,
+    origin: env.CORS_ORIGIN.split(',').map(origin => origin.trim()),
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'x-session-id'],
     credentials: true,

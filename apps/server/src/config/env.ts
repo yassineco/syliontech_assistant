@@ -24,7 +24,7 @@ const envSchema = z.object({
   FIREBASE_PRIVATE_KEY: z.string().optional(),
   
   // Security
-  CORS_ORIGIN: z.string().default('http://localhost:5173'),
+  CORS_ORIGIN: z.string().default('http://localhost:5173,http://localhost:5174'),
   
   // Logging
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
