@@ -9,35 +9,29 @@ import { isGeminiAvailable } from '../services/gemini.js';
 // ==========================================
 
 /**
- * Prompt système pour l'assistant Sofinco avec RAG
+ * Prompt système pour l'assistant Sofinco avec RAG - Version naturelle
  */
-const RAG_SYSTEM_PROMPT = `Tu es l'Assistant Crédit Sofinco, un conseiller virtuel spécialisé dans le crédit personnel et automobile.
+const RAG_SYSTEM_PROMPT = `Tu es l'Assistant Crédit Sofinco, un conseiller virtuel spécialisé.
 
-RÔLE ET MISSION:
+RÔLE:
 - Aide les clients avec leurs questions sur les crédits Sofinco
-- Réponds uniquement aux questions liées au crédit et aux services Sofinco
-- Utilise EXCLUSIVEMENT les informations fournies dans le contexte
-- Cite tes sources de manière claire et précise
+- Réponds de manière naturelle et conversationnelle
+- Utilise UNIQUEMENT les informations fournies dans le contexte
 
-RÈGLES DE RÉPONSE:
-1. TOUJOURS utiliser le vouvoiement
-2. Être bienveillant, professionnel et empathique
-3. Répondre de manière concise mais complète (maximum 200 mots)
-4. Citer OBLIGATOIREMENT les sources utilisées
-5. Si l'information n'est pas dans le contexte, le dire honnêtement
+STYLE DE RÉPONSE:
+1. Utilise le vouvoiement
+2. Sois direct et concis (évite "Voici les informations que j'ai trouvées")
+3. Réponds naturellement comme un conseiller humain
+4. Maximum 150 mots
+5. Ne mentionne JAMAIS que c'est un prototype ou une démo
 
-GUARDRAILS STRICTS:
-- Ne jamais inventer d'informations non présentes dans le contexte
-- Rappeler que c'est un "Prototype - informations non contractuelles"
-- Rediriger vers un conseiller pour les cas complexes
-- Refuser poliment les sujets hors crédit
+INTERDICTIONS:
+- Pas de formules artificielles comme "Voici...", "Je vous informe que..."
+- Pas de mention "prototype", "démo", "informations non contractuelles"
+- Pas d'invention - uniquement le contexte fourni
+- Pas de sur-politesse excessive
 
-FORMAT DE RÉPONSE:
-- Réponse claire et structurée
-- Citations sous forme de liste [Source: Titre]
-- Ton professionnel mais accessible
-
-IMPORTANT: Si tu ne trouves pas l'information dans le contexte fourni, dis-le clairement et propose de contacter un conseiller.`;
+IMPORTANT: Le client sait déjà qu'il parle à un assistant virtuel, sois simplement naturel et efficace.`;
 
 /**
  * Schéma pour valider la réponse de Gemini
@@ -194,14 +188,12 @@ RÉPONSE (format JSON attendu):
     // TODO: Implémenter l'intégration Gemini complète
     console.log('🤖 Simulation réponse Gemini avec contexte:', context.substring(0, 200) + '...');
     
-    // Réponse simulée basée sur le contexte
+    // Réponse simulée basée sur le contexte - Plus naturelle
     const contextSummary = retrievedChunks.slice(0, 2).map(chunk => 
       chunk.text.split('.')[0] + '.'
     ).join(' ');
     
-    const simulatedReply = `Selon les informations Sofinco, ${contextSummary} 
-
-*Prototype - Ces informations sont non contractuelles. Pour des détails précis, contactez un conseiller au 0 800 767 000.*`;
+    const simulatedReply = contextSummary;
     
     return {
       reply: simulatedReply,
@@ -218,7 +210,18 @@ RÉPONSE (format JSON attendu):
 }
 
 /**
- * Réponse locale extractive (mode MOCK)
+ * Phrases d'introduction naturelles (variées)
+ */
+const NATURAL_INTROS = [
+  '',  // Réponse directe sans intro
+  'Bien sûr. ',
+  'Absolument. ',
+  'Je peux vous répondre. ',
+  'Laissez-moi vous expliquer. ',
+];
+
+/**
+ * Réponse locale extractive (mode MOCK) - Version naturelle
  */
 export function answerLocally(
   query: string, 
@@ -227,7 +230,7 @@ export function answerLocally(
   try {
     if (retrievedChunks.length === 0) {
       return {
-        reply: 'Je n\'ai pas trouvé d\'information pertinente pour répondre à votre question. N\'hésitez pas à contacter un conseiller Sofinco au 0 800 767 000 pour une assistance personnalisée.',
+        reply: 'Je n\'ai pas l\'information précise pour répondre à cette question. Je vous invite à contacter directement un conseiller au 0 800 767 000.',
         citations: [],
         confidence: 0.1,
       };
@@ -255,32 +258,48 @@ export function answerLocally(
     scoredChunks.sort((a, b) => b.score - a.score);
     const bestChunks = scoredChunks.slice(0, 3);
     
-    // Construire la réponse extractive
-    let reply = 'Voici les informations que j\'ai trouvées :\n\n';
+    // Intro naturelle aléatoire
+    const intro = NATURAL_INTROS[Math.floor(Math.random() * NATURAL_INTROS.length)] || '';
+    let reply: string = intro;
     
-    bestChunks.forEach((item, index) => {
+    // Construire une réponse naturelle
+    const contentParts: string[] = [];
+    
+    bestChunks.forEach((item) => {
       if (item.score > 0) {
         // Extraire les phrases les plus pertinentes
         const sentences = item.chunk.text.split(/[.!?]+/);
-        const relevantSentences = sentences.filter(sentence => 
-          queryKeywords.some(keyword => 
-            sentence.toLowerCase().includes(keyword)
-          )
-        ).slice(0, 2);
+        const relevantSentences = sentences
+          .filter(sentence => {
+            const lower = sentence.toLowerCase();
+            return queryKeywords.some(keyword => lower.includes(keyword));
+          })
+          .map(s => s.trim())
+          .filter(s => s.length > 10)
+          .slice(0, 2);
         
         if (relevantSentences.length > 0) {
-          reply += `${relevantSentences.join('. ')}.`;
-          if (index < bestChunks.length - 1) reply += '\n\n';
+          contentParts.push(relevantSentences.join('. '));
         }
       }
     });
     
-    // Si pas de contenu pertinent trouvé
-    if (reply === 'Voici les informations que j\'ai trouvées :\n\n') {
-      reply = 'Je dispose d\'informations sur ce sujet mais elles ne correspondent pas exactement à votre question. Pour une réponse précise, je vous recommande de contacter un conseiller Sofinco.';
+    if (contentParts.length > 0) {
+      // Joindre les parties avec des connecteurs naturels
+      reply += contentParts.join('. ') + '.';
+      
+      // Nettoyer les répétitions et les artefacts
+      reply = reply
+        .replace(/\s+/g, ' ')  // Espaces multiples
+        .replace(/\.+/g, '.')  // Points multiples
+        .replace(/\.\s*\./g, '.') // Point point
+        .trim();
+        
+    } else {
+      reply += 'Les informations disponibles ne correspondent pas exactement à votre question. Un conseiller pourra vous apporter une réponse plus précise.';
     }
     
-    reply += '\n\n*Prototype - Informations non contractuelles*';
+    // Pas de mention "prototype" - le prospect sait que c'est une démo
     
     return {
       reply,
@@ -292,7 +311,7 @@ export function answerLocally(
     console.error('❌ Erreur réponse locale:', error);
     
     return {
-      reply: 'Je rencontre une difficulté technique pour traiter votre demande. Veuillez contacter un conseiller Sofinco au 0 800 767 000.',
+      reply: 'Je rencontre une difficulté technique. Veuillez contacter un conseiller au 0 800 767 000.',
       citations: [],
       confidence: 0.1,
     };
