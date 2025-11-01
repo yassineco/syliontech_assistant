@@ -35,9 +35,12 @@ export function DemoPage() {
     // TODO: Gérer la sélection d'offre
   }, []);
 
-  const handleAssistantMessage = useCallback(async (message: string): Promise<string> => {
+  const handleAssistantMessage = useCallback(async (
+    message: string, 
+    conversationHistory?: Array<{role: 'user' | 'assistant', message: string, timestamp: string}>
+  ): Promise<string> => {
     try {
-      const response = await sendMessage(message, lastSimulation);
+      const response = await sendMessage(message, lastSimulation, undefined, conversationHistory);
       return response.reply || 'Désolé, je n\'ai pas pu traiter votre demande.';
     } catch (error) {
       console.error('Erreur assistant:', error);

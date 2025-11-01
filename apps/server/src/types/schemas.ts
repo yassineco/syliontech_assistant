@@ -45,6 +45,11 @@ export const AssistantRequestSchema = z.object({
   message: z.string().min(1).max(500), // Message utilisateur
   context: z.record(z.any()).optional(), // Contexte additionnel
   slots: LoanParamsSchema.partial().optional(), // Paramètres déjà collectés
+  conversationHistory: z.array(z.object({
+    role: z.enum(['user', 'assistant']),
+    message: z.string(),
+    timestamp: z.string().optional(),
+  })).optional(), // Historique de conversation pour contexte
 });
 
 export type AssistantRequest = z.infer<typeof AssistantRequestSchema>;

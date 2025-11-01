@@ -11,8 +11,14 @@ interface Message {
   timestamp: Date;
 }
 
+interface ConversationEntry {
+  role: 'user' | 'assistant';
+  message: string;
+  timestamp: string;
+}
+
 interface AssistantPanelProps {
-  onMessage?: (message: string) => Promise<string>;
+  onMessage?: (message: string, conversationHistory?: ConversationEntry[]) => Promise<string>;
   disabled?: boolean;
 }
 
@@ -95,9 +101,18 @@ export function AssistantPanel({ onMessage, disabled }: AssistantPanelProps) {
     // Ajouter le message utilisateur
     addMessage('user', messageText);
 
+    // Préparer l'historique de conversation (5 derniers échanges)
+    const conversationHistory: ConversationEntry[] = messages
+      .slice(-8) // Les 8 derniers messages (4 échanges)
+      .map(msg => ({
+        role: msg.type,
+        message: msg.content,
+        timestamp: msg.timestamp.toISOString()
+      }));
+
     try {
-      // Envoyer à l'assistant
-      const response = await onMessage?.(messageText);
+      // Envoyer à l'assistant avec l'historique
+      const response = await onMessage?.(messageText, conversationHistory);
       
       if (response) {
         // Ajouter la réponse de l'assistant

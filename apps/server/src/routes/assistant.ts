@@ -114,17 +114,30 @@ const assistantRoute: FastifyPluginAsync = async (fastify) => {
           
           if (ragResult.chunks.length === 0) {
             // Aucun résultat précis trouvé pour répondre directement
+            const empathicResponses = [
+              'Je n\'ai pas trouvé d\'éléments précis pour répondre à votre question. Je peux vous expliquer la démarche ou vous aider à lancer une simulation si vous le souhaitez.',
+              'Cette question mérite une réponse plus détaillée que ce que j\'ai à disposition. Voulez-vous que je vous guide vers un conseiller ou que nous explorions une autre approche ?',
+              'Je n\'ai pas l\'information exacte pour vous répondre précisément. Puis-je vous aider d\'une autre manière ou vous orienter vers nos conseillers ?'
+            ];
+            
+            const randomResponse = empathicResponses[Math.floor(Math.random() * empathicResponses.length)] || 
+              'Je n\'ai pas trouvé d\'éléments précis pour répondre à votre question. Je peux vous expliquer la démarche ou vous aider à lancer une simulation si vous le souhaitez.';
+            
             response = {
               intent: 'information',
               slots: assistantRequest.slots || {},
-              reply: 'Je n\'ai pas trouvé d\'éléments précis pour répondre à votre question. Je peux vous expliquer la démarche ou vous aider à lancer une simulation si vous le souhaitez.',
+              reply: randomResponse,
               offers: [],
               nextAction: 'clarify',
               confidence: 0.3
             };
           } else {
             // Génération de la réponse avec les chunks trouvés
-            const ragResponse = await generateAnswer(assistantRequest.message, ragResult.chunks);
+            const ragResponse = await generateAnswer(
+              assistantRequest.message, 
+              ragResult.chunks,
+              assistantRequest.conversationHistory
+            );
             
             response = {
               intent: 'information',

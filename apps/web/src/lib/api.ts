@@ -41,6 +41,11 @@ export interface AssistantRequest {
   message: string;
   context?: Record<string, any>;
   slots?: Partial<LoanParams>;
+  conversationHistory?: Array<{
+    role: 'user' | 'assistant';
+    message: string;
+    timestamp?: string;
+  }>;
 }
 
 export interface AssistantReply {
@@ -158,13 +163,15 @@ class ApiClient {
   public async sendMessage(
     message: string,
     context?: Record<string, any>,
-    slots?: Partial<LoanParams>
+    slots?: Partial<LoanParams>,
+    conversationHistory?: Array<{role: 'user' | 'assistant', message: string, timestamp?: string}>
   ): Promise<AssistantReply> {
     const payload: AssistantRequest = {
       sessionId: this.sessionId,
       message,
       ...(context && { context }),
       ...(slots && { slots }),
+      ...(conversationHistory && { conversationHistory }),
     };
 
     return this.request<AssistantReply>('/assistant', {
@@ -202,8 +209,13 @@ export const simulateLoan = async (params: SimulationRequest): Promise<Simulatio
   });
 };
 
-export const sendMessage = async (message: string, context?: any): Promise<AssistantReply> => {
-  return apiClient.sendMessage(message, context);
+export const sendMessage = async (
+  message: string, 
+  context?: any,
+  slots?: Partial<LoanParams>,
+  conversationHistory?: Array<{role: 'user' | 'assistant', message: string, timestamp?: string}>
+): Promise<AssistantReply> => {
+  return apiClient.sendMessage(message, context, slots, conversationHistory);
 };
 
 // API publique pour l'application
@@ -221,8 +233,12 @@ export const api = {
   /**
    * Envoie un message à l'assistant
    */
-  sendMessage: (message: string, context?: Record<string, any>, slots?: Partial<LoanParams>) =>
-    apiClient.sendMessage(message, context, slots),
+  sendMessage: (
+    message: string, 
+    context?: Record<string, any>, 
+    slots?: Partial<LoanParams>,
+    conversationHistory?: Array<{role: 'user' | 'assistant', message: string, timestamp?: string}>
+  ) => apiClient.sendMessage(message, context, slots, conversationHistory),
 
   /**
    * Simule un crédit
