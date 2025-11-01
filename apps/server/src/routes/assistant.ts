@@ -113,11 +113,11 @@ const assistantRoute: FastifyPluginAsync = async (fastify) => {
           const ragResult = await searchIndex(assistantRequest.message, 3);
           
           if (ragResult.chunks.length === 0) {
-            // Aucun résultat trouvé dans la base de connaissances
+            // Aucun résultat précis trouvé pour répondre directement
             response = {
               intent: 'information',
               slots: assistantRequest.slots || {},
-              reply: 'Je n\'ai pas trouvé d\'information pertinente dans ma base de connaissances pour répondre à votre question. Pouvez-vous la reformuler ou me poser une question sur les crédits Sofinco ?',
+              reply: 'Je n\'ai pas trouvé d\'éléments précis pour répondre à votre question. Je peux vous expliquer la démarche ou vous aider à lancer une simulation si vous le souhaitez.',
               offers: [],
               nextAction: 'clarify',
               confidence: 0.3

@@ -221,6 +221,65 @@ const NATURAL_INTROS = [
 ];
 
 /**
+ * Suggestions contextuelles pour terminer naturellement
+ */
+const CONTEXTUAL_SUGGESTIONS: Record<string, string[]> = {
+  'conditions': [
+    ' Si vous le souhaitez, je peux vous expliquer la procédure de demande.',
+    ' Je peux également vous aider à estimer votre capacité d\'emprunt.',
+    ' Voulez-vous en savoir plus sur les documents nécessaires ?'
+  ],
+  'documents': [
+    ' Je peux aussi vous expliquer comment faire votre demande.',
+    ' Souhaitez-vous connaître les délais de traitement ?',
+    ' Je reste disponible pour toute précision.'
+  ],
+  'taux': [
+    ' Je peux vous aider à simuler votre crédit si vous voulez.',
+    ' Voulez-vous connaître les différentes options de remboursement ?',
+    ' N\'hésitez pas si vous avez d\'autres questions sur le financement.'
+  ],
+  'montant': [
+    ' Je peux également vous expliquer comment sont calculées les mensualités.',
+    ' Souhaitez-vous en savoir plus sur les conditions d\'éligibilité ?',
+    ' Je reste à votre disposition pour affiner votre projet.'
+  ],
+  'délai': [
+    ' Je peux vous guider dans la constitution de votre dossier si besoin.',
+    ' Voulez-vous connaître les étapes de la demande ?',
+    ' N\'hésitez pas pour toute autre question.'
+  ],
+  'default': [
+    ' Je reste à votre disposition pour toute autre question.',
+    ' N\'hésitez pas si vous avez besoin de précisions.',
+    ' Je peux vous en dire plus si vous le souhaitez.'
+  ]
+};
+
+/**
+ * Sélectionne une suggestion contextuelle basée sur la requête
+ */
+function getContextualSuggestion(query: string): string {
+  const lowerQuery = query.toLowerCase();
+  
+  // Chercher le contexte le plus pertinent
+  for (const [key, suggestions] of Object.entries(CONTEXTUAL_SUGGESTIONS)) {
+    if (key !== 'default' && lowerQuery.includes(key)) {
+      const suggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
+      return suggestion || '';
+    }
+  }
+  
+  // Fallback : suggestion par défaut
+  const defaultSuggestions = CONTEXTUAL_SUGGESTIONS['default'];
+  if (defaultSuggestions) {
+    return defaultSuggestions[Math.floor(Math.random() * defaultSuggestions.length)] || '';
+  }
+  
+  return '';
+}
+
+/**
  * Réponse locale extractive (mode MOCK) - Version naturelle
  */
 export function answerLocally(
@@ -294,6 +353,12 @@ export function answerLocally(
         .replace(/\.+/g, '.')  // Points multiples
         .replace(/\.\s*\./g, '.') // Point point
         .trim();
+      
+      // Ajouter une suggestion contextuelle naturelle
+      const suggestion = getContextualSuggestion(query);
+      if (suggestion) {
+        reply += suggestion;
+      }
         
     } else {
       reply += 'Les informations disponibles ne correspondent pas exactement à votre question. Un conseiller pourra vous apporter une réponse plus précise.';
