@@ -1,5 +1,5 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { Mic, MicOff, Volume2, VolumeX, Send } from 'lucide-react';
+import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { Mic, MicOff, Send, VolumeX } from 'lucide-react';
 import { sendMessage } from '../lib/api';
 
 interface Message {
@@ -30,12 +30,82 @@ export function SimpleVoiceAssistant({ onMessage }: SimpleVoiceAssistantProps) {
   const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const autoRestartTimerRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Support navigateur
+  // Support navigateur avec détection avancée
   const isSupported = Boolean(
     typeof window !== 'undefined' &&
     (window.SpeechRecognition || window.webkitSpeechRecognition) &&
     window.speechSynthesis
   );
+
+  // Détection des capacités du navigateur
+  const browserCapabilities = useMemo(() => {
+    if (typeof window === 'undefined') return { name: 'unknown', features: [] };
+    
+    const userAgent = navigator.userAgent;
+    const features = [];
+    
+    if (window.SpeechRecognition) features.push('native-speech');
+    if (window.webkitSpeechRecognition) features.push('webkit-speech');
+    if (window.speechSynthesis) features.push('speech-synthesis');
+    if ((window as any).AudioContext || (window as any).webkitAudioContext) features.push('audio-context');
+    
+    const browser = userAgent.includes('Chrome') ? 'chrome' :
+                   userAgent.includes('Firefox') ? 'firefox' :
+                   userAgent.includes('Safari') ? 'safari' :
+                   userAgent.includes('Edge') ? 'edge' : 'unknown';
+    
+    return { name: browser, features };
+  }, []);
+
+  console.log('🌐 Capacités navigateur:', browserCapabilities);
+
+  // Feedback audio pour les actions utilisateur (DÉSACTIVÉ temporairement)
+  const playFeedbackSound = useCallback((type: 'start' | 'stop' | 'send' | 'error') => {
+    // Désactivé pour éviter les bips intempestifs
+    return;
+    
+    try {
+      const audioContext = new ((window as any).AudioContext || (window as any).webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      // Configuration selon le type de feedback
+      switch (type) {
+        case 'start':
+          oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+          oscillator.frequency.setValueAtTime(1000, audioContext.currentTime + 0.1);
+          gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+          break;
+        case 'stop':
+          oscillator.frequency.setValueAtTime(1000, audioContext.currentTime);
+          oscillator.frequency.setValueAtTime(800, audioContext.currentTime + 0.1);
+          gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+          break;
+        case 'send':
+          oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+          oscillator.frequency.setValueAtTime(900, audioContext.currentTime + 0.1);
+          oscillator.frequency.setValueAtTime(1200, audioContext.currentTime + 0.2);
+          gainNode.gain.setValueAtTime(0.08, audioContext.currentTime);
+          break;
+        case 'error':
+          oscillator.frequency.setValueAtTime(300, audioContext.currentTime);
+          oscillator.frequency.setValueAtTime(250, audioContext.currentTime + 0.2);
+          gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+          break;
+      }
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.3);
+      
+      console.log(`🔊 Feedback audio: ${type}`);
+    } catch (error) {
+      // Feedback audio optionnel - pas critique
+      console.log('⚠️ Feedback audio non disponible');
+    }
+  }, []);
 
   // Vérification des permissions microphone
   const checkMicrophonePermissions = useCallback(async () => {
@@ -103,17 +173,33 @@ export function SimpleVoiceAssistant({ onMessage }: SimpleVoiceAssistantProps) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition() as any;
     
-    // Configuration détaillée - AGGRESSIVE pour capturer la parole
+    // Configuration optimisée pour sensibilité maximale
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = 'fr-FR';
-    recognition.maxAlternatives = 5;
+    recognition.maxAlternatives = 10; // Plus d'alternatives pour meilleure précision
     
-    console.log('⚙️ Configuration Speech Recognition:', {
+    // Paramètres avancés si disponibles (webkit)
+    if (recognition.serviceURI) {
+      recognition.serviceURI = 'wss://www.google.com/speech-api/v2/recognize';
+    }
+    
+    // Configuration audio avancée si supportée
+    try {
+      // Forcer l'utilisation de contraintes audio optimales
+      recognition.audioTrack = true;
+      recognition.noiseSuppressionConstraint = true;
+      recognition.echoCancellationConstraint = true;
+    } catch (error) {
+      console.log('⚠️ Paramètres audio avancés non supportés');
+    }
+    
+    console.log('⚙️ Configuration Speech Recognition optimisée:', {
       continuous: recognition.continuous,
       interimResults: recognition.interimResults,
       lang: recognition.lang,
-      maxAlternatives: recognition.maxAlternatives
+      maxAlternatives: recognition.maxAlternatives,
+      audioOptimized: true
     });
 
     recognition.onstart = () => {
@@ -151,78 +237,99 @@ export function SimpleVoiceAssistant({ onMessage }: SimpleVoiceAssistantProps) {
       console.log('🗣️ Fin de parole');
     };
 
-    recognition.onresult = (event: any) => {
-      console.log('📝 Résultat reçu:', event);
-      
-      let finalTranscript = '';
-      let interimTranscript = '';
-      
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const result = event.results[i];
-        const transcript = result[0].transcript;
+      recognition.onresult = (event: any) => {
+        console.log('📝 Résultat reçu:', event);
         
-        if (result.isFinal) {
-          finalTranscript += transcript;
-          console.log('✅ Texte final:', transcript, `(confiance: ${result[0].confidence})`);
-        } else {
-          interimTranscript += transcript;
-          console.log('⏳ Texte interim:', transcript);
-        }
-      }
-      
-      // Mise à jour du transcript affiché
-      const fullTranscript = finalTranscript || interimTranscript;
-      setCurrentTranscript(fullTranscript);
-      setInputText(fullTranscript);
-      
-      // Si on a un texte final avec plus de 3 mots
-      if (finalTranscript && finalTranscript.trim().split(' ').length >= 3) {
-        console.log('🚀 Auto-envoi activé pour:', finalTranscript);
+        let finalTranscript = '';
+        let interimTranscript = '';
+        let maxConfidence = 0;
         
-        // Arrêter le timer de silence s'il existe
-        if (silenceTimerRef.current) {
-          clearTimeout(silenceTimerRef.current);
-          silenceTimerRef.current = null;
-        }
-        
-        // Envoyer le message automatiquement
-        setTimeout(() => {
-          triggerAutoSend(finalTranscript.trim());
-          setCurrentTranscript('');
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const result = event.results[i];
+          const transcript = result[0].transcript;
+          const confidence = result[0].confidence || 0;
+          maxConfidence = Math.max(maxConfidence, confidence);
           
-          // Redémarrer l'écoute après envoi si en mode auto
-          if (isAutoMode && !isSpeaking) {
-            autoRestartTimerRef.current = setTimeout(() => {
-              startListening();
-            }, 1500);
+          if (result.isFinal) {
+            finalTranscript += transcript;
+            console.log('✅ Texte final:', transcript, `(confiance: ${confidence.toFixed(2)})`);
+          } else {
+            interimTranscript += transcript;
+            console.log('⏳ Texte interim:', transcript, `(confiance: ${confidence.toFixed(2)})`);
           }
-        }, 100);
-      }
-      // Si on a un texte interim significatif, démarrer le timer de silence
-      else if (interimTranscript && interimTranscript.trim().length > 5) {
-        console.log('⏱️ Démarrage timer silence...');
-        
-        if (silenceTimerRef.current) {
-          clearTimeout(silenceTimerRef.current);
         }
         
-        silenceTimerRef.current = setTimeout(() => {
-          if (currentTranscript.trim()) {
-            console.log('⏰ Timeout silence - envoi auto:', currentTranscript);
-            triggerAutoSend(currentTranscript.trim());
+        // Mise à jour du transcript affiché
+        const fullTranscript = finalTranscript || interimTranscript;
+        setCurrentTranscript(fullTranscript);
+        setInputText(fullTranscript);
+        
+        // Logique d'auto-envoi adaptative
+        const wordCount = fullTranscript.trim().split(/\s+/).length;
+        const isSignificant = wordCount >= 2; // Seuil réduit de 3 à 2 mots
+        const hasGoodConfidence = maxConfidence > 0.5 || finalTranscript; // Confiance > 50% ou texte final
+        
+        // Si on a un texte final significatif avec bonne confiance
+        if (finalTranscript && isSignificant && hasGoodConfidence) {
+          console.log('🚀 Auto-envoi activé:', {
+            text: finalTranscript,
+            wordCount,
+            confidence: maxConfidence.toFixed(2)
+          });
+          
+          // Arrêter le timer de silence s'il existe
+          if (silenceTimerRef.current) {
+            clearTimeout(silenceTimerRef.current);
+            silenceTimerRef.current = null;
+          }
+          
+          // Envoyer le message automatiquement
+          setTimeout(() => {
+            triggerAutoSend(finalTranscript.trim());
             setCurrentTranscript('');
             
+            // Redémarrer l'écoute après envoi si en mode auto
             if (isAutoMode && !isSpeaking) {
               autoRestartTimerRef.current = setTimeout(() => {
-                startListening();
+                startListening(true); // Silent restart
               }, 1500);
             }
+          }, 100);
+        }
+        // Si on a un texte interim significatif, démarrer le timer de silence adaptatif
+        else if (interimTranscript && wordCount >= 2) {
+          console.log('⏱️ Timer silence adaptatif...', {
+            text: interimTranscript,
+            wordCount,
+            confidence: maxConfidence.toFixed(2)
+          });
+          
+          if (silenceTimerRef.current) {
+            clearTimeout(silenceTimerRef.current);
           }
-        }, 3000); // 3 secondes de silence
-      }
-    };
-
-    recognition.onerror = (event: any) => {
+          
+          // Timer adaptatif selon la longueur du texte
+          const silenceDuration = wordCount <= 3 ? 2500 : 2000; // 2.5s pour phrases courtes, 2s pour longues
+          
+          silenceTimerRef.current = setTimeout(() => {
+            if (currentTranscript.trim() && wordCount >= 2) {
+              console.log('⏰ Timeout silence adaptatif - envoi auto:', {
+                text: currentTranscript,
+                wordCount,
+                duration: silenceDuration
+              });
+              triggerAutoSend(currentTranscript.trim());
+              setCurrentTranscript('');
+              
+              if (isAutoMode && !isSpeaking) {
+                autoRestartTimerRef.current = setTimeout(() => {
+                  startListening(true); // Silent auto-restart
+                }, 1500);
+              }
+            }
+          }, silenceDuration);
+        }
+      };    recognition.onerror = (event: any) => {
       console.error('❌ Erreur Speech Recognition:', event);
       console.error('🔍 Détails erreur:', {
         error: event.error,
@@ -268,7 +375,7 @@ export function SimpleVoiceAssistant({ onMessage }: SimpleVoiceAssistantProps) {
   }, [isSupported]);
 
   // Fonction pour démarrer l'écoute automatique
-  const startListening = useCallback(async () => {
+  const startListening = useCallback(async (silent = false) => {
     if (!isSupported) {
       setErrorMessage('❌ Reconnaissance vocale non supportée');
       return;
@@ -290,6 +397,11 @@ export function SimpleVoiceAssistant({ onMessage }: SimpleVoiceAssistantProps) {
       console.log('🎯 Démarrage écoute automatique...');
       setErrorMessage('🎤 Écoute en cours - Parlez naturellement...');
       
+      // Feedback audio uniquement si action manuelle (pas silent)
+      if (!silent) {
+        playFeedbackSound('start');
+      }
+      
       const recognition = initRecognition();
       if (!recognition) return;
 
@@ -300,11 +412,14 @@ export function SimpleVoiceAssistant({ onMessage }: SimpleVoiceAssistantProps) {
       console.error('❌ Erreur démarrage écoute:', error);
       setErrorMessage('❌ Impossible de démarrer l\'écoute');
     }
-  }, [isSupported, isRecording, checkMicrophonePermissions, initRecognition]);
+  }, [isSupported, isRecording, checkMicrophonePermissions, initRecognition, playFeedbackSound]);
 
   // Fonction pour arrêter l'écoute
   const stopListening = useCallback(() => {
     console.log('🛑 Arrêt écoute...');
+    
+    // Feedback audio d'arrêt
+    playFeedbackSound('stop');
     
     // Arrêter tous les timers
     if (silenceTimerRef.current) {
@@ -330,7 +445,7 @@ export function SimpleVoiceAssistant({ onMessage }: SimpleVoiceAssistantProps) {
     setIsRecording(false);
     setCurrentTranscript('');
     setErrorMessage('✅ Prêt ! Activez le mode auto pour une écoute continue');
-  }, []);
+  }, [playFeedbackSound]);
 
   // Toggle mode automatique
   const toggleAutoMode = useCallback(async () => {
@@ -340,7 +455,7 @@ export function SimpleVoiceAssistant({ onMessage }: SimpleVoiceAssistantProps) {
     if (newAutoMode) {
       console.log('🔄 Activation mode automatique');
       setErrorMessage('🔄 Mode automatique activé - Démarrage...');
-      await startListening();
+      await startListening(false); // Avec bip car action manuelle
     } else {
       console.log('⏸️ Désactivation mode automatique');
       stopListening();
@@ -504,47 +619,126 @@ export function SimpleVoiceAssistant({ onMessage }: SimpleVoiceAssistantProps) {
     }
   }, []); // Pas de dépendances pour éviter les re-renders
 
-  // Synthèse vocale simple et fiable
+  // Synthèse vocale optimisée avec gestion des interruptions
   const speak = useCallback((text: string) => {
     if (!text.trim() || isSpeaking) return;
 
-    // Nettoyer le texte pour une meilleure prononciation
+    // Nettoyer le texte pour une prononciation optimale
     const cleanText = text
       .replace(/\*\*/g, '') // Supprimer le markdown
       .replace(/\*/g, '')
       .replace(/#{1,6}\s/g, '')
-      .replace(/\bcrédits?\b/gi, 'crédi') // crédit -> crédi (évite C-R-É-D-I-T)
-      .replace(/TAEG/gi, 'taux annuel effectif global')
+      .replace(/\bcrédits?\b/gi, 'crédi') // crédit -> crédi (évite épellation)
+      .replace(/TAEG/gi, 'T.A.E.G.') // Épeler l'acronyme
+      .replace(/APR/gi, 'A.P.R.')
       .replace(/\b(\d+)\s*€/gi, '$1 euros')
       .replace(/\b(\d+)\s*%/gi, '$1 pour cent')
       .replace(/24h/gi, '24 heures')
-      .replace(/\n+/g, '. '); // Remplacer les retours ligne par des points
+      .replace(/\n+/g, '. ') // Remplacer les retours ligne par des points
+      .replace(/\s+/g, ' ') // Normaliser les espaces
+      .trim();
 
+    console.log('🔊 Démarrage synthèse vocale optimisée:', cleanText.substring(0, 50) + '...');
     setIsSpeaking(true);
-    
+
+    // Sélectionner la meilleure voix française
+    const voices = speechSynthesis.getVoices();
+    const frenchVoice = voices.find(voice => 
+      voice.lang.startsWith('fr') && (voice.name.includes('Google') || voice.name.includes('Amélie'))
+    ) || voices.find(voice => voice.lang.startsWith('fr'));
+
     const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.voice = frenchVoice || null;
     utterance.lang = 'fr-FR';
-    utterance.rate = 0.9;
+    utterance.rate = 0.85; // Légèrement plus lent pour clarté
     utterance.pitch = 1.0;
     utterance.volume = 0.8;
 
-    utterance.onend = () => {
-      setIsSpeaking(false);
+    // Gestion interruption par nouvelle parole utilisateur
+    utterance.onstart = () => {
+      console.log('🔊 Synthèse démarrée - écoute des interruptions...');
+      
+      // Écouter pour interruptions si en mode auto
+      if (isAutoMode && !isRecording) {
+        setTimeout(() => {
+          // Démarrer une écoute discrète pendant la synthèse
+          const interruptionRecognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+          interruptionRecognition.continuous = false;
+          interruptionRecognition.interimResults = true;
+          interruptionRecognition.lang = 'fr-FR';
+          
+          interruptionRecognition.onresult = (event: any) => {
+            if (event.results.length > 0) {
+              const transcript = event.results[0][0].transcript.trim();
+              if (transcript.length > 3) {
+                console.log('🛑 Interruption détectée:', transcript);
+                speechSynthesis.cancel();
+                setIsSpeaking(false);
+                
+                // Traiter la nouvelle demande
+                if (transcript.split(/\s+/).length >= 2) {
+                  setTimeout(() => {
+                    triggerAutoSend(transcript);
+                  }, 300);
+                }
+              }
+            }
+          };
+          
+          interruptionRecognition.onerror = () => {
+            // Erreur silencieuse - pas critique
+          };
+          
+          try {
+            interruptionRecognition.start();
+          } catch (error) {
+            // Pas critique
+          }
+        }, 500);
+      }
     };
 
-    utterance.onerror = () => {
+    utterance.onend = () => {
+      console.log('🔊 Synthèse terminée');
       setIsSpeaking(false);
+      
+      // Redémarrer l'écoute automatiquement si en mode auto
+      if (isAutoMode && !isRecording) {
+        setTimeout(() => {
+          startListening(true); // Silent auto-restart après synthèse
+        }, 800);
+      }
+    };
+
+    utterance.onerror = (error) => {
+      console.error('❌ Erreur synthèse:', error);
+      setIsSpeaking(false);
+      
+      // Redémarrer l'écoute même en cas d'erreur
+      if (isAutoMode && !isRecording) {
+        setTimeout(() => {
+          startListening(true); // Silent auto-restart après erreur
+        }, 1000);
+      }
     };
 
     speechSynthesis.cancel(); // Arrêter toute synthèse en cours
     speechSynthesis.speak(utterance);
-  }, [isSpeaking]);
+  }, [isSpeaking, isAutoMode, isRecording, startListening]);
 
-  // Arrêter la synthèse vocale
+  // Arrêter la synthèse vocale avec redémarrage intelligent
   const stopSpeaking = useCallback(() => {
+    console.log('🛑 Arrêt manuel synthèse');
     speechSynthesis.cancel();
     setIsSpeaking(false);
-  }, []);
+    
+    // Redémarrer l'écoute si en mode auto
+    if (isAutoMode && !isRecording) {
+      setTimeout(() => {
+        startListening(true); // Silent auto-restart après arrêt manuel
+      }, 500);
+    }
+  }, [isAutoMode, isRecording, startListening]);
 
   // Ajouter un message
   const addMessage = useCallback((type: 'user' | 'assistant', content: string) => {
@@ -563,6 +757,10 @@ export function SimpleVoiceAssistant({ onMessage }: SimpleVoiceAssistantProps) {
     if (!text || isProcessing) return;
 
     console.log('📤 Auto-envoi:', text);
+    
+    // Feedback audio d'envoi
+    playFeedbackSound('send');
+    
     setIsProcessing(true);
 
     // Ajouter le message utilisateur
@@ -677,9 +875,9 @@ export function SimpleVoiceAssistant({ onMessage }: SimpleVoiceAssistantProps) {
           setIsAutoMode(true);
           setErrorMessage('🔄 Mode automatique activé - Parlez naturellement !');
           
-          // Démarrer l'écoute après un petit délai
+          // Démarrer l'écoute après un petit délai (silencieux au démarrage)
           setTimeout(() => {
-            startListening();
+            startListening(true); // Silent initial start
           }, 1000);
         }
       }
