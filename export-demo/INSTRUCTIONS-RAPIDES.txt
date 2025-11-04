@@ -1,0 +1,157 @@
+═══════════════════════════════════════════════════════════════════
+    🏦 ASSISTANT SOFINCO - DÉMO INTERACTIVE
+═══════════════════════════════════════════════════════════════════
+
+📦 CONTENU DU PACKAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ sofinco-demo.html        → Page principale (à ouvrir)
+✅ assets/                   → Fichiers CSS et JavaScript
+✅ README.md                 → Documentation complète
+✅ GUIDE-PRESENTATION.html   → Guide visuel de présentation
+
+TAILLE TOTALE : ~203 Ko (très léger !)
+
+
+🚀 LANCEMENT RAPIDE (3 ÉTAPES)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1️⃣  EXTRAIRE L'ARCHIVE
+   └─> Décompresser sofinco-assistant-demo.zip
+
+2️⃣  DÉMARRER UN SERVEUR
+   └─> Ouvrir un terminal dans le dossier export-demo
+   
+   Option A - Python (Recommandé):
+   $ python3 -m http.server 8000
+   
+   Option B - Node.js:
+   $ npx serve .
+   
+   Option C - VS Code:
+   Installer "Live Server" → Clic droit → "Open with Live Server"
+
+3️⃣  OUVRIR DANS LE NAVIGATEUR
+   └─> http://localhost:8000/sofinco-demo.html
+
+
+✨ FONCTIONNALITÉS PRINCIPALES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🏠 PAGE D'ACCUEIL
+   • Design fidèle au site officiel Sofinco.fr
+   • Logo authentique intégré
+   • Navigation complète avec menu
+   • Formulaire de simulation visible
+   • Bouton assistant flottant (bas-droite)
+
+💰 SIMULATEUR DE CRÉDIT
+   • Calcul en temps réel
+   • Choix de projets : Auto, Travaux, Équipement
+   • Affichage des offres avec TAEG
+   • Recommandations personnalisées
+
+🤖 ASSISTANT IA
+   • Conversation naturelle et empathique
+   • Base de connaissances Sofinco complète
+   • Mémoire conversationnelle
+   • Suggestions contextuelles automatiques
+
+📱 RESPONSIVE DESIGN
+   • Mobile-friendly (375px+)
+   • Desktop optimisé (1280px)
+   • Animations fluides
+
+
+🎯 SCÉNARIO DE PRÉSENTATION (10 MIN)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+┌─ 1. INTRODUCTION (1 min)
+│  "Prototype Assistant Sofinco avec IA conversationnelle"
+│
+├─ 2. HOMEPAGE (2 min)
+│  → Montrer le design, navigation, logo, formulaire
+│  → Cliquer sur le bouton assistant pour le montrer
+│
+├─ 3. SIMULATEUR (3 min)
+│  → Cliquer "Simuler un projet"
+│  → Choisir: Automobile, 15000€, 48 mois
+│  → Voir les offres + recommandation
+│
+├─ 4. ASSISTANT IA (4 min)
+│  Questions à poser:
+│  • "Quels sont les montants disponibles ?"
+│  • "Comment faire une demande ?"
+│  • "Puis-je rembourser par anticipation ?"
+│  → Montrer conversation naturelle + suggestions
+│
+└─ 5. CONCLUSION (1 min)
+   "Solution moderne : design + simulation + IA"
+
+
+🔧 INFORMATIONS TECHNIQUES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Frontend : React 18 + TypeScript
+• Build    : Vite 5.4.21 (optimisé production)
+• Backend  : Fastify + TF-IDF RAG (port 3001)
+• Styling  : CSS-in-JS inline
+• Icons    : Lucide React
+
+⚠️  IMPORTANT : L'assistant IA nécessite le backend sur 
+    localhost:3001 pour fonctionner pleinement
+
+
+🌐 COMPATIBILITÉ NAVIGATEURS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Chrome / Edge (90+)
+✅ Firefox (88+)
+✅ Safari (14+)
+
+
+📁 STRUCTURE DES FICHIERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+export-demo/
+├── sofinco-demo.html          ← Point d'entrée principal
+├── GUIDE-PRESENTATION.html    ← Guide visuel interactif
+├── README.md                  ← Documentation détaillée
+└── assets/
+    ├── index-[hash].css       ← Styles compilés (27 Ko)
+    ├── index-[hash].js        ← Application (195 Ko)
+    └── index-[hash].js.map    ← Source map (debug)
+
+
+💡 CONSEILS POUR LA PRÉSENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Tester avant la démo
+✓ Préparer les questions pour l'assistant
+✓ Montrer le responsive (redimensionner fenêtre)
+✓ Avoir le backend lancé si possible
+✓ Utiliser Chrome ou Firefox pour meilleures performances
+
+
+🔗 PARTAGE ET DISTRIBUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📧 Email   : Envoyer sofinco-assistant-demo.zip (203 Ko)
+☁️  Cloud   : Upload sur Google Drive / OneDrive
+🌐 Interne : Partager sur serveur réseau entreprise
+💻 Local   : Copier sur clé USB
+
+
+📞 SUPPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Repository : yassineco/sofinco-assistant
+Branch     : feat/sofinco-assistant-prototype
+Version    : 1.0.0
+Date       : Novembre 2025
+Status     : ✅ Production Ready
+
+
+═══════════════════════════════════════════════════════════════════
+    Prêt pour présentation ! 🎉
+═══════════════════════════════════════════════════════════════════

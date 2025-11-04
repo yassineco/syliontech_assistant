@@ -4,10 +4,11 @@ import { SofincoLogo } from './SofincoLogo';
 
 interface SofincoMainPageProps {
   onNavigateToAssistant?: () => void;
+  onNavigateToSimpleAssistant?: () => void;
   onNavigateToSimulator?: () => void;
 }
 
-export function SofincoMainPage({ onNavigateToAssistant, onNavigateToSimulator }: SofincoMainPageProps) {
+export function SofincoMainPage({ onNavigateToAssistant, onNavigateToSimpleAssistant, onNavigateToSimulator }: SofincoMainPageProps) {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#ffffff' }}>
       {/* Header Navigation */}
@@ -371,6 +372,103 @@ export function SofincoMainPage({ onNavigateToAssistant, onNavigateToSimulator }
                 <path d="M7 16H11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               Contactez votre assistant
+            </button>
+          </div>
+        </div>
+
+        {/* Bouton Assistant Simple - Solution Stable */}
+        <div
+          onClick={onNavigateToSimpleAssistant}
+          style={{
+            position: 'fixed',
+            bottom: '24px',
+            right: '320px',
+            backgroundColor: '#28a745',
+            borderRadius: '20px',
+            padding: '0',
+            cursor: 'pointer',
+            boxShadow: '0 4px 20px rgba(40, 167, 69, 0.3)',
+            zIndex: 1000,
+            border: '1px solid #28a745',
+            overflow: 'hidden',
+            minWidth: '280px',
+            transition: 'all 0.3s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 6px 25px rgba(40, 167, 69, 0.4)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 20px rgba(40, 167, 69, 0.3)';
+          }}
+        >
+          {/* Header avec logo et question */}
+          <div style={{
+            padding: '16px 20px 12px 20px',
+            borderBottom: '1px solid rgba(255,255,255,0.2)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            backgroundColor: '#28a745'
+          }}>
+            <div style={{
+              width: '40px',
+              height: '32px',
+              backgroundColor: 'white',
+              borderRadius: '6px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              padding: '4px'
+            }}>
+              <SofincoLogo size={32} />
+            </div>
+            <div style={{
+              fontSize: '15px',
+              fontWeight: '500',
+              color: 'white',
+              lineHeight: '1.3'
+            }}>
+              Assistant Vocal Simple 🎙️
+            </div>
+          </div>
+          
+          {/* Bouton d'action */}
+          <div style={{
+            padding: '12px 20px 16px 20px',
+            backgroundColor: '#28a745'
+          }}>
+            <button style={{
+              width: '100%',
+              backgroundColor: 'white',
+              color: '#28a745',
+              border: 'none',
+              borderRadius: '25px',
+              padding: '12px 20px',
+              fontSize: '14px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#f8f9fa';
+              e.currentTarget.style.transform = 'scale(1.02)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'white';
+              e.currentTarget.style.transform = 'scale(1)';
+            }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1C13.1 1 14 1.9 14 3V12C14 13.1 13.1 14 12 14C10.9 14 10 13.1 10 12V3C10 1.9 10.9 1 12 1Z" fill="currentColor"/>
+                <path d="M19 10V12C19 16.97 15.39 21 10.5 21.93V20H13.5C14.05 20 14.5 19.55 14.5 19C14.5 18.45 14.05 18 13.5 18H10.5C9.95 18 9.5 17.55 9.5 17C9.5 16.45 9.95 16 10.5 16H13.5C14.05 16 14.5 15.55 14.5 15C14.5 14.45 14.05 14 13.5 14H8V12C8 6.48 12.48 2 18 2H19V10Z" fill="currentColor"/>
+              </svg>
+              Solution Stable
             </button>
           </div>
         </div>

@@ -4,11 +4,12 @@ import { Banner } from '../components/Banner';
 import { LoanSimulator } from '../components/LoanSimulator';
 import { OfferCard } from '../components/OfferCard';
 import { AssistantPanel } from '../components/AssistantPanel';
+import { SimpleVoiceAssistant } from '../components/SimpleVoiceAssistant';
 import { SofincoLogo } from '../components/SofincoLogo';
 import { simulateLoan, sendMessage } from '../lib/api';
 import type { Offer } from '../lib/api';
 
-type ViewMode = 'homepage' | 'simulator' | 'offers' | 'assistant';
+type ViewMode = 'homepage' | 'simulator' | 'offers' | 'assistant' | 'simple-assistant';
 
 export function SofincoHomePage() {
   const [currentView, setCurrentView] = useState<ViewMode>('homepage');
@@ -56,6 +57,10 @@ export function SofincoHomePage() {
     setCurrentView('assistant');
   };
 
+  const handleNavigateToSimpleAssistant = () => {
+    setCurrentView('simple-assistant');
+  };
+
   const handleNavigateToSimulator = () => {
     setCurrentView('simulator');
   };
@@ -69,6 +74,7 @@ export function SofincoHomePage() {
     return (
       <SofincoMainPage 
         onNavigateToAssistant={handleNavigateToAssistant}
+        onNavigateToSimpleAssistant={handleNavigateToSimpleAssistant}
         onNavigateToSimulator={handleNavigateToSimulator}
       />
     );
@@ -125,6 +131,7 @@ export function SofincoHomePage() {
             {currentView === 'simulator' && 'Simulateur de crédit'}
             {currentView === 'offers' && 'Vos offres'}
             {currentView === 'assistant' && 'Assistant IA'}
+            {currentView === 'simple-assistant' && 'Assistant Vocal Simple'}
           </div>
         </div>
       </header>
@@ -291,10 +298,51 @@ export function SofincoHomePage() {
             <AssistantPanel onMessage={handleAssistantMessage} />
           </div>
         )}
+
+        {/* Mode Assistant Simple */}
+        {currentView === 'simple-assistant' && (
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <div style={{
+              backgroundColor: 'white',
+              borderRadius: '12px',
+              padding: '24px',
+              boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16)',
+              marginBottom: '24px'
+            }}>
+              <h1 style={{
+                fontSize: '28px',
+                fontWeight: '700',
+                color: '#28a745',
+                margin: '0 0 8px 0',
+                textAlign: 'center'
+              }}>
+                Assistant Vocal Simple 🎙️
+              </h1>
+              <p style={{
+                fontSize: '16px',
+                color: '#666',
+                textAlign: 'center',
+                margin: '0 0 8px 0'
+              }}>
+                Solution stable avec contrôle manuel - Push-to-Talk
+              </p>
+              <div style={{
+                fontSize: '14px',
+                color: '#28a745',
+                textAlign: 'center',
+                margin: '0 0 24px 0',
+                fontWeight: '500'
+              }}>
+                ✅ Pas de boucles infinies • ✅ Contrôle total • ✅ Solution fiable
+              </div>
+            </div>
+            <SimpleVoiceAssistant />
+          </div>
+        )}
       </main>
 
       {/* Bouton Assistant Modern - Style Sofinco */}
-      {currentView !== 'assistant' && (
+      {currentView !== 'assistant' && currentView !== 'simple-assistant' && (
         <div
           onClick={handleNavigateToAssistant}
           style={{

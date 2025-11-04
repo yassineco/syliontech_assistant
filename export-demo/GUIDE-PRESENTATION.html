@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide de Présentation - Assistant Sofinco</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1AAEB7 0%, #004B44 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #1AAEB7;
+            font-size: 36px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        h2 {
+            color: #004B44;
+            font-size: 24px;
+            margin: 30px 0 15px 0;
+            border-left: 4px solid #1AAEB7;
+            padding-left: 15px;
+        }
+        
+        h3 {
+            color: #1AAEB7;
+            font-size: 18px;
+            margin: 20px 0 10px 0;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #1AAEB7;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #1AAEB7;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .command {
+            background: #2d3748;
+            color: #48bb78;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .feature {
+            background: #e8f5f7;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #1AAEB7;
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            color: #004B44;
+            margin-bottom: 5px;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #1AAEB7;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: #004B44;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #004B44;
+        }
+        
+        .btn-secondary:hover {
+            background: #1AAEB7;
+        }
+        
+        ul {
+            margin: 10px 0 10px 30px;
+        }
+        
+        li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        
+        .demo-section {
+            background: linear-gradient(135deg, rgba(26, 174, 183, 0.1) 0%, rgba(0, 75, 68, 0.1) 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="card">
+            <h1>🏦 Assistant Sofinco - Guide de Présentation</h1>
+            <p class="subtitle">Prototype interactif avec IA conversationnelle</p>
+            
+            <div class="success">
+                <strong>✅ Votre démo est prête !</strong><br>
+                Fichier : <code>sofinco-assistant-demo.zip</code> disponible dans Téléchargements
+            </div>
+        </div>
+
+        <!-- Instructions de lancement -->
+        <div class="card">
+            <h2>🚀 Lancer la démo en 3 étapes</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Extraire l'archive</strong>
+                <p style="margin: 10px 0 0 40px;">
+                    Décompressez <code>sofinco-assistant-demo.zip</code> dans un dossier de votre choix
+                </p>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Démarrer un serveur local</strong>
+                <p style="margin: 10px 0 0 40px;">Dans le dossier <code>export-demo</code> :</p>
+                <div class="command" style="margin-left: 40px;">python3 -m http.server 8000</div>
+                <p style="margin: 5px 0 0 40px; color: #666; font-size: 14px;">
+                    Ou utilisez : <code>npx serve .</code> ou VS Code Live Server
+                </p>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Ouvrir dans le navigateur</strong>
+                <p style="margin: 10px 0 0 40px;">
+                    Visitez : <a href="http://localhost:8000/sofinco-demo.html" target="_blank">http://localhost:8000/sofinco-demo.html</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Fonctionnalités -->
+        <div class="card">
+            <h2>✨ Fonctionnalités à démontrer</h2>
+            
+            <div class="feature-list">
+                <div class="feature">
+                    <div class="feature-title">🏠 Page d'accueil</div>
+                    <ul style="margin: 10px 0 0 20px; font-size: 14px;">
+                        <li>Design officiel Sofinco</li>
+                        <li>Logo authentique</li>
+                        <li>Navigation complète</li>
+                        <li>Formulaire intégré</li>
+                    </ul>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-title">💰 Simulateur</div>
+                    <ul style="margin: 10px 0 0 20px; font-size: 14px;">
+                        <li>Calcul en temps réel</li>
+                        <li>Multiple projets</li>
+                        <li>Offres personnalisées</li>
+                        <li>Recommandations</li>
+                    </ul>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-title">🤖 Assistant IA</div>
+                    <ul style="margin: 10px 0 0 20px; font-size: 14px;">
+                        <li>Conversation naturelle</li>
+                        <li>Base de connaissances</li>
+                        <li>Mémoire contextuelle</li>
+                        <li>Suggestions intelligentes</li>
+                    </ul>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-title">📱 Responsive</div>
+                    <ul style="margin: 10px 0 0 20px; font-size: 14px;">
+                        <li>Mobile-friendly</li>
+                        <li>Desktop optimisé</li>
+                        <li>Animations fluides</li>
+                        <li>UX moderne</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scénario de présentation -->
+        <div class="card">
+            <h2>🎯 Scénario de présentation recommandé</h2>
+            
+            <h3>Introduction (1 minute)</h3>
+            <p>"Voici le prototype de l'Assistant Sofinco, une interface moderne qui intègre l'IA pour améliorer l'expérience client."</p>
+            
+            <h3>Démonstration Homepage (2 minutes)</h3>
+            <div class="demo-section">
+                <strong>Points à montrer :</strong>
+                <ul>
+                    <li>Design fidèle au site officiel Sofinco.fr</li>
+                    <li>Logo officiel intégré</li>
+                    <li>Navigation intuitive avec menu déroulant</li>
+                    <li>Formulaire de simulation visible et accessible</li>
+                    <li>Bouton assistant flottant (en bas à droite)</li>
+                </ul>
+            </div>
+            
+            <h3>Démonstration Simulateur (3 minutes)</h3>
+            <div class="demo-section">
+                <strong>Parcours utilisateur :</strong>
+                <ol>
+                    <li>Cliquer sur "Simuler un projet"</li>
+                    <li>Choisir un type de projet (ex: Automobile)</li>
+                    <li>Entrer un montant (ex: 15000€)</li>
+                    <li>Sélectionner une durée (ex: 48 mois)</li>
+                    <li>Voir les offres générées avec TAEG, mensualités, coût total</li>
+                    <li>Montrer l'offre recommandée mise en avant</li>
+                </ol>
+            </div>
+            
+            <h3>Démonstration Assistant IA (4 minutes)</h3>
+            <div class="demo-section">
+                <strong>Questions à poser :</strong>
+                <ol>
+                    <li>"Quels sont les montants et durées disponibles ?"</li>
+                    <li>"Comment faire une demande de crédit ?"</li>
+                    <li>"Puis-je rembourser par anticipation ?"</li>
+                    <li>"Comment vous contacter ?"</li>
+                </ol>
+                <p style="margin-top: 10px;">
+                    <strong>Montrer :</strong> Conversation naturelle, réponses contextuelles, suggestions automatiques
+                </p>
+            </div>
+            
+            <h3>Conclusion (1 minute)</h3>
+            <p>"Cette solution combine design moderne, simulation précise et intelligence artificielle pour offrir une expérience client optimale."</p>
+        </div>
+
+        <!-- Notes techniques -->
+        <div class="card">
+            <h2>🔧 Notes techniques</h2>
+            
+            <div class="warning">
+                <strong>⚠️ Backend requis pour fonctionnalités complètes</strong><br>
+                L'assistant IA nécessite le backend API sur <code>localhost:3001</code> pour fonctionner pleinement.
+            </div>
+            
+            <h3>Stack technique :</h3>
+            <ul>
+                <li><strong>Frontend :</strong> React 18 + TypeScript + Vite</li>
+                <li><strong>Backend :</strong> Fastify + TF-IDF RAG System</li>
+                <li><strong>Styling :</strong> CSS-in-JS (inline styles)</li>
+                <li><strong>Build :</strong> Production optimisé (gzip, minification)</li>
+            </ul>
+            
+            <h3>Fichiers inclus :</h3>
+            <ul>
+                <li><code>sofinco-demo.html</code> - Page principale</li>
+                <li><code>assets/</code> - CSS et JavaScript compilés</li>
+                <li><code>README.md</code> - Documentation complète</li>
+            </ul>
+        </div>
+
+        <!-- Actions rapides -->
+        <div class="card" style="text-align: center;">
+            <h2 style="border: none; padding: 0;">Actions rapides</h2>
+            <div style="margin-top: 20px;">
+                <a href="../export-demo/sofinco-demo.html" class="btn">🚀 Lancer la démo</a>
+                <a href="../export-demo/README.md" class="btn btn-secondary">📖 Lire la doc complète</a>
+            </div>
+            
+            <p style="margin-top: 30px; color: #666; font-size: 14px;">
+                Version 1.0.0 | Novembre 2025 | Prototype Production Ready
+            </p>
+        </div>
+    </div>
+</body>
+</html>
