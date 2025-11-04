@@ -1,16 +1,19 @@
 {
-  "name": "sofinco-assistant",
+  "name": "siliyontech-assistant",
   "version": "1.0.0",
-  "description": "Prototype Sofinco Assistant IA - Web Demo avec Assistant Vocal/Visuel",
+  "description": "Prototype SylionTech Assistant IA - Widget Multi-tenant avec Assistant Vocal/Visuel",
   "private": true,
   "workspaces": [
     "apps/*"
   ],
   "scripts": {
-    "dev:web": "pnpm --filter @sofinco/web dev",
-    "dev:server": "pnpm --filter @sofinco/server dev",
+    "dev:web": "pnpm --filter @silyontech/web dev",
+    "dev:server": "pnpm --filter @silyontech/server dev",
+    "dev:widget": "pnpm --filter @syliontech/assistant-widget dev",
     "dev": "concurrently \"pnpm dev:server\" \"pnpm dev:web\"",
     "build": "pnpm -r build",
+    "build:widget": "pnpm --filter @syliontech/assistant-widget build",
+    "deploy:widget": "pnpm --filter @syliontech/assistant-widget deploy",
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
     "type-check": "pnpm -r type-check",
@@ -18,8 +21,10 @@
     "setup": "pnpm install"
   },
   "keywords": [
-    "sofinco",
+    "silyontech",
     "assistant-ia",
+    "multi-tenant",
+    "widget",
     "vertex-ai",
     "gemini",
     "web-speech-api",

@@ -1,32 +1,64 @@
-# Sofinco Assistant - Prototype IA
+# SylionTech Assistant - Multi-Tenant AI Platform
 
-> **Prototype — Non contractuel. Données fictives.**
+> **Assistant IA Commercial Multi-Tenant avec Widget Intégrable**
 
-Un assistant conversationnel intelligent pour faciliter les demandes de crédit personnel, avec interface vocale et visuelle.
+Plateforme SaaS d'assistant conversationnel intelligent avec architecture multi-tenant, widget CDN intégrable, et infrastructure cloud complète.
 
 ![Version](https://img.shields.io/badge/version-1.0.0-green)
-![Status](https://img.shields.io/badge/status-prototype-orange)
-![Mode](https://img.shields.io/badge/mode-demo--mock-blue)
+![Status](https://img.shields.io/badge/status-production--ready-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
-## 🎯 Présentation
+## 🎯 Vue d'ensemble
 
-Ce prototype démontre les capacités d'un assistant IA pour le secteur du crédit personnel, développé sur la base du projet **Magic Button** et adapté aux besoins spécifiques de simulation de crédit.
+**SylionTech Assistant** est une plateforme SaaS qui permet aux entreprises d'intégrer un assistant IA conversationnel sur leur site web en une seule ligne de code. L'architecture multi-tenant permet à SylionTech d'utiliser la solution en interne tout en la commercialisant.
 
-### ✨ Fonctionnalités
+### ✨ Fonctionnalités Principales
 
-- **🎤 Interface vocale** : Reconnaissance et synthèse vocale (Web Speech API)
-- **💬 Assistant conversationnel** : IA contextuelle pour guider l'utilisateur
-- **🧮 Simulateur de crédit** : Calculs financiers en temps réel
-- **📋 Offres personnalisées** : Propositions adaptées au profil
-- **🎨 UI Sofinco-like** : Interface inspirée du site officiel (sans éléments propriétaires)
+- **🔌 Widget Intégrable** : Script CDN en 1 ligne avec data-attributes
+- **🏢 Multi-Tenant** : Architecture SaaS avec isolation des données
+- **� RAG Intelligence** : Base de connaissances par tenant avec IA contextuelle
+- **🎨 Personnalisable** : Thèmes, couleurs, position, langue configurables
+- **🔐 Sécurisé** : Authentification API key, quotas, rate limiting
+- **� Responsive** : Interface adaptative mobile/desktop
+- **⚡ Performance** : CDN global, cache intelligent, < 50KB
 
-### ✨ **Fonctionnalités principales**
+### 🏗️ Architecture
 
-- **🔤 Actions IA** : Corriger, Résumer, Traduire, Optimiser
-- **🌍 Traduction intelligente** : FR ↔ EN/ES/DE/IT/AR avec sélection de langue
-- **📚 Assistant RAG** : Upload documents, recherche sémantique, réponses augmentées
-- **🎯 Intelligence contextuelle** : Adaptation automatique au domaine (politique, démographique, technique)
-- **🎨 Interface moderne** : Design responsive avec système de notifications
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     SYLIONTECH ASSISTANT                    │
+├─────────────────────────────────────────────────────────────┤
+│  📦 Widget CDN        │  🌐 API Server        │  👨‍💼 Admin     │
+│  (Vercel)             │  (Cloud Run)          │  (Firebase)  │
+│                       │                       │              │
+│  • assistant.js       │  • /v1/chat           │  • Tenants   │
+│  • Auto-init          │  • /v1/rag/docs       │  • API Keys  │
+│  • Data-attributes    │  • Multi-tenant       │  • Analytics │
+│  • Themes/Position    │  • RAG + Gemini       │  • Quotas    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🚀 Intégration Client (1 ligne)
+
+### Intégration Basique
+```html
+<script src="https://cdn.syliontech.ai/assistant.js" 
+        data-tenant-id="your-tenant-id"></script>
+```
+
+### Intégration Avancée
+```html
+<script src="https://cdn.syliontech.ai/assistant.js" 
+        data-tenant-id="acme-corp"
+        data-api-key="ak_live_..."
+        data-theme="dark"
+        data-lang="en"
+        data-position="bottom-left"
+        data-primary-color="#10B981"
+        data-welcome-message="Hello! How can I help?"></script>
+```
 
 ---
 

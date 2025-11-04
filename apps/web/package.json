@@ -1,7 +1,7 @@
 {
-  "name": "@sofinco/web",
+  "name": "@silyontech/web",
   "version": "1.0.0",
-  "description": "Sofinco Assistant Frontend - React + Vite + Web Speech API",
+  "description": "SylionTech Assistant Frontend - React + Vite + Web Speech API",
   "type": "module",
   "scripts": {
     "dev": "vite",

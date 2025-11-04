@@ -1,7 +1,7 @@
 {
-  "name": "@sofinco/server",
+  "name": "@silyontech/server",
   "version": "1.0.0",
-  "description": "Sofinco Assistant API Server - Fastify + Vertex AI Gemini",
+  "description": "SylionTech Assistant API Server - Fastify + Vertex AI Gemini",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {

@@ -27,8 +27,8 @@ export function SimpleVoiceAssistant({ onMessage }: SimpleVoiceAssistantProps) {
   // Refs pour la reconnaissance vocale
   const recognitionRef = useRef<any>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const autoRestartTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const silenceTimerRef = useRef<number | null>(null);
+  const autoRestartTimerRef = useRef<number | null>(null);
   
   // Support navigateur avec détection avancée
   const isSupported = Boolean(
@@ -910,7 +910,7 @@ export function SimpleVoiceAssistant({ onMessage }: SimpleVoiceAssistantProps) {
     <div className="flex flex-col h-full max-w-4xl mx-auto bg-white rounded-lg shadow-lg">
       {/* En-tête simplifié */}
       <div className="bg-green-600 text-white p-4 rounded-t-lg">
-        <h1 className="text-xl font-bold">🎤 Assistant Vocal Sofinco</h1>
+        <h1 className="text-xl font-bold">🎤 Assistant Vocal SylionTech</h1>
         
         {/* Message principal */}
         <p className="text-green-100 text-sm mt-2">
@@ -929,7 +929,7 @@ export function SimpleVoiceAssistant({ onMessage }: SimpleVoiceAssistantProps) {
         {messages.length === 0 && (
           <div className="text-center text-gray-500 mt-8">
             <div className="text-4xl mb-4">🎤</div>
-            <p className="text-lg font-medium">Bonjour ! Je suis votre assistant Sofinco.</p>
+            <p className="text-lg font-medium">Bonjour ! Je suis votre assistant SylionTech.</p>
             <p className="text-sm mt-2">Cliquez sur le microphone et parlez-moi de votre projet de financement.</p>
           </div>
         )}

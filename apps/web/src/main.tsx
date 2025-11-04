@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { SofincoHomePage } from './pages/SofincoHomePage';
+import { SylionTechHomePage } from './pages/SylionTechHomePage';
 import './index.css';
 
 const rootElement = document.getElementById('root');
@@ -12,6 +12,6 @@ const root = createRoot(rootElement);
 
 root.render(
   <StrictMode>
-    <SofincoHomePage />
+    <SylionTechHomePage />
   </StrictMode>
 );

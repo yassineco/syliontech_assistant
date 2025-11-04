@@ -1,7 +1,7 @@
-# 📋 Todo Liste - Sofinco Assistant
+# 📋 Todo Liste - SylionTech Assistant
 
 ## 🎯 Objectif Principal
-Créer un prototype d'assistant IA intelligent pour Sofinco avec système RAG, simulateur de crédit et interface vocale/textuelle.
+Créer un prototype d'assistant IA intelligent pour SylionTech avec système RAG, services technologiques et interface vocale/textuelle.
 
 ---
 
@@ -17,7 +17,7 @@ Créer un prototype d'assistant IA intelligent pour Sofinco avec système RAG, s
 
 ### 🧠 Système RAG (Complet)
 - [x] **Architecture RAG** - Types Zod, chunking MD, embeddings vectoriels
-- [x] **Base de connaissances** - 4 fichiers FAQ Sofinco complets
+- [x] **Base de connaissances** - 4 fichiers FAQ SylionTech complets
 - [x] **Services backend** - API endpoints RAG, service LLM, intégration Gemini
 - [x] **Validation** - Tests compilation, structure documentée
 

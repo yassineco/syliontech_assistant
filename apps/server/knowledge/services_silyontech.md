@@ -1,33 +1,33 @@
-# Produits et Offres Sofinco
+# Services et Solutions SylionTech
 
-## Offres de Crédit Personnel
+## Offres de Services Technologiques
 
-### Offre Standard Sofinco
+### Développement Web & Mobile
 **Caractéristiques principales :**
-- Taux préférentiel sans assurance obligatoire
-- Idéale pour les montants moyens (3 000€ à 20 000€)
-- Traitement rapide : réponse immédiate, versement sous 48h
-- Aucun frais de dossier
-- Remboursement anticipé possible sans pénalités
+- Solutions sur mesure React, Vue.js, React Native
+- Idéal pour les startups et PME (5 000€ à 50 000€)
+- Livraison rapide : MVP en 4-6 semaines
+- Maintenance et support inclus 6 mois
+- Code source propriété du client
 
 **Avantages :**
-- Taux optimisé selon le profil client
-- Simplicité des démarches
-- Flexibilité de remboursement
+- Technologies modernes et performantes
+- Équipe experte certifiée
+- Accompagnement complet du projet
 - Transparence totale sur les coûts
 
-### Offre Sérénité Sofinco
+### Consulting & Architecture Cloud
 **Caractéristiques principales :**
-- Assurance décès-invalidité incluse dans le TAEG
-- Majoration de +1,2% par rapport à l'offre Standard
-- Protection complète de l'emprunteur et des proches
-- Idéale pour les projets importants (voiture, travaux)
+- Migration et optimisation cloud (AWS, GCP, Azure)
+- Audit sécurité et performance inclus
+- Formation équipes techniques
+- Idéal pour la transformation digitale
 
 **Avantages :**
-- Tranquillité d'esprit totale
-- Prise en charge des mensualités en cas d'incident
-- Protection des proches en cas de décès
-- Simplification administrative (assurance intégrée)
+- Expertise cloud certifiée
+- Réduction des coûts infrastructure
+- Amélioration de la sécurité
+- Montée en compétences des équipes
 
 ### Comparaison des Offres
 

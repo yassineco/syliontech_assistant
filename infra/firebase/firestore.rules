@@ -1,0 +1,89 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===========================================
+    // RÈGLES MULTI-TENANT SILYONTECH ASSISTANT
+    // ===========================================
+    
+    // Tenants - Accès administrateur uniquement
+    match /tenants/{tenantId} {
+      allow read, write: if request.auth != null 
+        && (request.auth.token.role == 'admin' 
+            || request.auth.token.tenantId == tenantId);
+    }
+    
+    // API Keys - Accès restreint par tenant
+    match /apiKeys/{keyId} {
+      allow read: if request.auth != null 
+        && request.auth.token.tenantId == resource.data.tenantId;
+      allow write: if request.auth != null 
+        && request.auth.token.role == 'admin';
+    }
+    
+    // Conversations - Isolation par tenant
+    match /conversations/{conversationId} {
+      allow read, write: if request.auth != null 
+        && request.auth.token.tenantId == resource.data.tenantId;
+      
+      // Validation des données obligatoires
+      allow create: if request.auth != null 
+        && request.resource.data.keys().hasAll(['tenantId', 'sessionId', 'createdAt'])
+        && request.auth.token.tenantId == request.resource.data.tenantId;
+    }
+    
+    // Messages dans les conversations
+    match /conversations/{conversationId}/messages/{messageId} {
+      allow read, write: if request.auth != null 
+        && request.auth.token.tenantId == get(/databases/$(database)/documents/conversations/$(conversationId)).data.tenantId;
+    }
+    
+    // Documents RAG - Accès par tenant
+    match /ragDocuments/{documentId} {
+      allow read, write: if request.auth != null 
+        && request.auth.token.tenantId == resource.data.tenantId;
+      
+      allow create: if request.auth != null 
+        && request.resource.data.tenantId == request.auth.token.tenantId;
+    }
+    
+    // Analytics et événements
+    match /events/{eventId} {
+      allow write: if request.auth != null 
+        && request.resource.data.tenantId == request.auth.token.tenantId;
+      
+      allow read: if request.auth != null 
+        && (request.auth.token.role == 'admin' 
+            || request.auth.token.tenantId == resource.data.tenantId);
+    }
+    
+    // Configurations de widget par tenant
+    match /widgetConfigs/{tenantId} {
+      allow read, write: if request.auth != null 
+        && request.auth.token.tenantId == tenantId;
+    }
+    
+    // Quotas et limites par tenant
+    match /quotas/{tenantId} {
+      allow read: if request.auth != null 
+        && request.auth.token.tenantId == tenantId;
+      
+      allow write: if request.auth != null 
+        && request.auth.token.role == 'admin';
+    }
+    
+    // Logs d'audit - Lecture admin uniquement
+    match /auditLogs/{logId} {
+      allow read: if request.auth != null 
+        && request.auth.token.role == 'admin';
+      
+      allow create: if request.auth != null;
+    }
+    
+    // Règle par défaut - Refuser l'accès
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

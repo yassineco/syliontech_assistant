@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SylionTech Assistant - Démo Widget</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: white;
+    }
+    
+    .demo-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .hero {
+      text-align: center;
+      padding: 60px 0;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 4rem 0;
+    }
+    
+    .feature {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .feature h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1.5rem;
+    }
+    
+    .integration {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      margin: 2rem 0;
+    }
+    
+    .code-block {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: 'Monaco', 'Consolas', monospace;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+    
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 2rem 0;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <div class="hero">
+      <h1>🚀 SylionTech Assistant</h1>
+      <p>Widget d'assistant IA intégrable en une ligne de code</p>
+    </div>
+    
+    <div class="features">
+      <div class="feature">
+        <h3>💬 Intégration Simple</h3>
+        <p>Ajoutez l'assistant à votre site en une seule ligne de code. Configuration via data-attributes.</p>
+      </div>
+      
+      <div class="feature">
+        <h3>🎨 Personnalisable</h3>
+        <p>Thèmes, couleurs, position, messages personnalisables. S'adapte à votre marque.</p>
+      </div>
+      
+      <div class="feature">
+        <h3>🌐 Multi-tenant</h3>
+        <p>Architecture SaaS avec isolation des données par tenant. API key sécurisée.</p>
+      </div>
+      
+      <div class="feature">
+        <h3>📱 Responsive</h3>
+        <p>Interface adaptative mobile/desktop. Thème automatique clair/sombre.</p>
+      </div>
+      
+      <div class="feature">
+        <h3>🧠 IA Avancée</h3>
+        <p>Powered by RAG avec base de connaissances spécialisée. Réponses contextuelles.</p>
+      </div>
+      
+      <div class="feature">
+        <h3>⚡ Performance</h3>
+        <p>CDN global, chargement asynchrone, cache intelligent. < 50KB compressé.</p>
+      </div>
+    </div>
+    
+    <div class="integration">
+      <h3>🔧 Intégration</h3>
+      <p>Copiez-collez ce code dans votre site :</p>
+      <div class="code-block">
+&lt;script src="https://cdn.syliontech.ai/assistant.js" 
+        data-tenant-id="demo"
+        data-theme="auto"
+        data-lang="fr"
+        data-position="bottom-right"
+        data-primary-color="#3B82F6"&gt;&lt;/script&gt;
+      </div>
+    </div>
+    
+    <div class="controls">
+      <button class="btn" onclick="window.SylionTechAssistant?.open()">Ouvrir Assistant</button>
+      <button class="btn" onclick="window.SylionTechAssistant?.close()">Fermer Assistant</button>
+      <button class="btn" onclick="window.SylionTechAssistant?.toggle()">Toggle Assistant</button>
+      <button class="btn" onclick="changeTheme()">Changer Thème</button>
+      <button class="btn" onclick="changePosition()">Changer Position</button>
+      <button class="btn" onclick="testVoice()">Test Voix</button>
+      <button class="btn" onclick="toggleAutoSpeak()">Toggle Auto-Speak</button>
+    </div>
+    
+    <div class="footer">
+      <p>Made with ❤️ by SylionTech • <a href="https://syliontech.ai" style="color: white;">syliontech.ai</a></p>
+    </div>
+  </div>
+
+  <!-- Widget Assistant -->
+  <script src="/dist/assistant.js" 
+          data-tenant-id="demo"
+          data-api-key="demo-key"
+          data-api-url="http://localhost:3001"
+          data-theme="auto"
+          data-lang="fr"
+          data-position="bottom-right"
+          data-primary-color="#3B82F6"
+          data-welcome-message="Bonjour ! Je suis l'assistant SylionTech. Comment puis-je vous aider ?"
+          data-enable-voice="true"
+          data-speech-to-text="true"
+          data-auto-speak="true"
+          data-debug="true"></script>
+
+  <script>
+    let currentTheme = 'auto'
+    let currentPosition = 'bottom-right'
+    let autoSpeakEnabled = true
+    
+    function changeTheme() {
+      const themes = ['light', 'dark', 'auto']
+      const current = themes.indexOf(currentTheme)
+      currentTheme = themes[(current + 1) % themes.length]
+      
+      window.SylionTechAssistant?.setConfig({ theme: currentTheme })
+      console.log('Thème changé:', currentTheme)
+    }
+    
+    function changePosition() {
+      const positions = ['bottom-right', 'bottom-left', 'top-right', 'top-left']
+      const current = positions.indexOf(currentPosition)
+      currentPosition = positions[(current + 1) % positions.length]
+      
+      window.SylionTechAssistant?.setConfig({ position: currentPosition })
+      console.log('Position changée:', currentPosition)
+    }
+    
+    function testVoice() {
+      if (window.SylionTechAssistant?.widget?.speak) {
+        window.SylionTechAssistant.widget.speak('Bonjour ! Je teste la synthèse vocale de SylionTech Assistant.')
+        console.log('Test synthèse vocale lancé')
+      } else {
+        console.log('Synthèse vocale non disponible')
+      }
+    }
+    
+    function toggleAutoSpeak() {
+      autoSpeakEnabled = !autoSpeakEnabled
+      window.SylionTechAssistant?.setConfig({ autoSpeak: autoSpeakEnabled })
+      console.log('Auto-speak:', autoSpeakEnabled ? 'activé' : 'désactivé')
+    }
+    
+    // Test API globale
+    window.addEventListener('load', () => {
+      console.log('API SylionTech Assistant:', window.SylionTechAssistant)
+      
+      setTimeout(() => {
+        if (window.SylionTechAssistant?.widget?.voiceManager) {
+          console.log('🎤 Voice features available:', {
+            recognition: window.SylionTechAssistant.widget.voiceManager.isVoiceSupported(),
+            voices: window.SylionTechAssistant.widget.voiceManager.getAvailableVoices().length
+          })
+        }
+      }, 1000)
+    })
+  </script>
+</body>
+</html>

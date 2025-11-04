@@ -1,28 +1,28 @@
-# FAQ Générales - Crédit Sofinco
+# FAQ Générales - Services SylionTech
 
 ## Éligibilité et conditions
 
-### Qui peut faire une demande de crédit ?
+### Qui peut faire une demande de devis ?
 
-Pour être éligible à un crédit personnel Sofinco, vous devez remplir les conditions suivantes :
+Pour bénéficier des services SylionTech, vous devez remplir les conditions suivantes :
 
-- Être âgé de 18 ans minimum et de 75 ans maximum
-- Résider en France métropolitaine ou dans les DOM-TOM
-- Avoir des revenus réguliers et justifiables
-- Ne pas être fiché à la Banque de France (FICP)
-- Disposer d'un compte bancaire en France
+- Être une entreprise, startup ou particulier porteur de projet
+- Avoir un projet technologique défini ou en cours de définition
+- Disposer d'un budget adapté au projet (minimum 2 000€)
+- Être motivé pour s'impliquer dans le développement
+- Avoir une vision claire des objectifs business
 
-### Quels sont les montants et durées disponibles ?
+### Quels sont les budgets et délais disponibles ?
 
-**Montants de crédit :**
-- Minimum : 1 000 €
-- Maximum : 75 000 €
+**Budgets de projet :**
+- Minimum : 2 000 €
+- Maximum : 500 000 €
 
-**Durées de remboursement :**
-- Minimum : 6 mois
-- Maximum : 84 mois (7 ans)
+**Délais de réalisation :**
+- Minimum : 2 semaines (petits projets)
+- Maximum : 12 mois (projets complexes)
 
-La mensualité et la durée sont adaptées à votre capacité de remboursement et à votre projet.
+Le budget et les délais sont adaptés à la complexité de votre projet et aux technologies requises.
 
 ## Démarches et délais
 

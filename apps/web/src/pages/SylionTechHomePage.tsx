@@ -1,17 +1,17 @@
 import React, { useState, useCallback } from 'react';
-import { SofincoMainPage } from '../components/SofincoMainPage';
+import { SylionTechMainPage } from '../components/SylionTechMainPage';
 import { Banner } from '../components/Banner';
 import { LoanSimulator } from '../components/LoanSimulator';
 import { OfferCard } from '../components/OfferCard';
 import { AssistantPanel } from '../components/AssistantPanel';
 import { SimpleVoiceAssistant } from '../components/SimpleVoiceAssistant';
-import { SofincoLogo } from '../components/SofincoLogo';
+import { SylionTechLogo } from '../components/SylionTechLogo';
 import { simulateLoan, sendMessage } from '../lib/api';
 import type { Offer } from '../lib/api';
 
 type ViewMode = 'homepage' | 'simulator' | 'offers' | 'assistant' | 'simple-assistant';
 
-export function SofincoHomePage() {
+export function SylionTechHomePage() {
   const [currentView, setCurrentView] = useState<ViewMode>('homepage');
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(false);
@@ -69,10 +69,10 @@ export function SofincoHomePage() {
     setCurrentView('homepage');
   };
 
-  // Page d'accueil Sofinco
+  // Page d'accueil SylionTech
   if (currentView === 'homepage') {
     return (
-      <SofincoMainPage 
+      <SylionTechMainPage 
         onNavigateToAssistant={handleNavigateToAssistant}
         onNavigateToSimpleAssistant={handleNavigateToSimpleAssistant}
         onNavigateToSimulator={handleNavigateToSimulator}
@@ -388,7 +388,7 @@ export function SofincoHomePage() {
               flexShrink: 0,
               padding: '4px'
             }}>
-              <SofincoLogo size={32} />
+              <SylionTechLogo size={32} />
             </div>
             <div style={{
               fontSize: '15px',
