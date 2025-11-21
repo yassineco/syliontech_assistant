@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "dev:web": "pnpm --filter @syliontech/web dev",
+    "dev:admin": "pnpm --filter @syliontech/admin dev",
     "dev:server": "pnpm --filter @syliontech/server dev",
     "dev:widget": "pnpm --filter @syliontech/assistant-widget dev",
     "dev": "concurrently \"pnpm dev:server\" \"pnpm dev:web\"",
