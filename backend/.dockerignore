@@ -1,0 +1,16 @@
+node_modules
+dist
+*.log
+.env
+.env.*
+!.env.example
+*.md
+.git
+.gitignore
+coverage
+.vscode
+.idea
+*.test.ts
+__tests__
+test-*.js
+diagnose-*.js

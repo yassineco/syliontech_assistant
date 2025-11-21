@@ -1,0 +1,22 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copier package.json
+COPY package*.json ./
+
+# Installer Fastify seulement
+RUN npm install fastify
+
+# Copier le fichier JS
+COPY index.js .
+
+# Exposer le port
+EXPOSE 8080
+
+# Variables d'environnement
+ENV NODE_ENV=production
+ENV PORT=8080
+
+# Démarrer l'application
+CMD ["node", "index.js"]

@@ -1,0 +1,27 @@
+{
+  "name": "@syliontech/assistant-widget",
+  "version": "1.0.0",
+  "description": "Widget CDN intégrable pour l'assistant SylionTech",
+  "main": "dist/assistant.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:prod": "vite build && cp dist/assistant.js dist/widget.js",
+    "deploy": "vercel --prod"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "terser": "^5.44.0",
+    "typescript": "^5.5.0",
+    "vite": "^5.4.0",
+    "vite-plugin-dts": "^4.0.3"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

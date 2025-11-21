@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Magic Button - Test des Nouvelles Fonctionnalités UX</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid #667eea;
+        }
+        
+        .test-text {
+            background: #f8fafc;
+            border: 2px dashed #e2e8f0;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .test-text:hover {
+            background: #e2e8f0;
+            border-color: #667eea;
+        }
+        
+        .feature-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .instructions {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-active { background: #10b981; }
+        .status-inactive { background: #ef4444; }
+        .status-processing { background: #f59e0b; }
+        
+        .emoji { font-size: 1.5em; margin-right: 8px; }
+        
+        .code {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 Magic Button - Enhanced UX Testing</h1>
+        <p>Page de test pour les nouvelles fonctionnalités d'interface persistante</p>
+        <div class="feature-highlight">
+            <h3>✨ Recherchez le bouton flottant en haut à droite ! ✨</h3>
+            <p>L'extension devrait maintenant être visible en permanence sur cette page</p>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2><span class="emoji">🧪</span>Tests de Sélection de Texte</h2>
+        <div class="instructions">
+            <h4>📋 Instructions :</h4>
+            <ol>
+                <li>Sélectionnez le texte dans les zones ci-dessous</li>
+                <li>Observez le bouton flottant qui doit "pulser" ✨</li>
+                <li>Cliquez sur le bouton flottant pour ouvrir l'interface</li>
+                <li>Testez les 4 actions disponibles</li>
+            </ol>
+        </div>
+        
+        <h3>📝 Texte avec Fautes (Test Correction)</h3>
+        <div class="test-text">
+            Salut, jespere que tu va bien. Il faut que on se voit pour parler de ce projet important. Sa va être genial ! Je pensse qu'ont peut faire quelque chose de super. Qu'est-ce que tu en pense ?
+        </div>
+        
+        <h3>📰 Texte Long (Test Résumé)</h3>
+        <div class="test-text">
+            L'intelligence artificielle représente aujourd'hui l'une des révolutions technologiques les plus importantes de notre époque. Cette technologie, qui semblait encore relever de la science-fiction il y a quelques décennies, est maintenant intégrée dans notre quotidien à travers nos smartphones, nos assistants vocaux, et de nombreuses applications que nous utilisons chaque jour. Les algorithmes d'apprentissage automatique permettent aux machines de traiter d'énormes quantités de données, d'identifier des patterns complexes et de prendre des décisions de manière autonome. Cette capacité transforme profondément de nombreux secteurs, de la médecine à la finance, en passant par l'éducation et les transports. Cependant, cette révolution soulève également des questions importantes concernant l'éthique, l'emploi, et l'impact social de ces technologies.
+        </div>
+        
+        <h3>📚 Texte Très Long (Test Scroll)</h3>
+        <div class="test-text">
+            L'histoire de l'informatique commence au milieu du XXe siècle avec les premiers ordinateurs électroniques. Ces machines énormes, qui occupaient des salles entières, étaient capables d'effectuer des calculs complexes bien plus rapidement que les méthodes manuelles de l'époque. 
+
+            L'ENIAC, l'un des premiers ordinateurs électroniques, fut développé en 1946 à l'Université de Pennsylvanie. Il pesait plus de 30 tonnes et utilisait environ 18 000 tubes à vide. Malgré sa taille imposante, sa puissance de calcul était infiniment moindre que celle d'un smartphone moderne.
+
+            Les années 1950 et 1960 ont vu l'émergence des langages de programmation de haut niveau. FORTRAN, développé par IBM en 1957, fut l'un des premiers langages permettant aux programmeurs d'écrire du code plus proche du langage naturel. COBOL suivit peu après, conçu spécifiquement pour les applications commerciales.
+
+            L'invention du transistor en 1947 par Bardeen, Brattain et Shockley révolutionna l'industrie électronique. Ces petits composants remplacèrent progressivement les tubes à vide, permettant la miniaturisation des ordinateurs. Cette innovation ouvrit la voie aux circuits intégrés dans les années 1960.
+
+            L'ère des micro-ordinateurs débuta dans les années 1970 avec des machines comme l'Altair 8800. Apple II, lancé en 1977, popularisa l'informatique personnelle grâce à son interface utilisateur relativement simple et ses capacités graphiques avancées pour l'époque.
+
+            Les années 1980 marquèrent l'explosion de l'informatique personnelle avec l'IBM PC et ses compatibles. Microsoft DOS devint le système d'exploitation dominant, posant les bases de l'empire Microsoft. Parallèlement, Apple développait le Macintosh avec son interface graphique révolutionnaire.
+
+            Internet, né des projets militaires ARPANET dans les années 1970, se démocratisa dans les années 1990. Le World Wide Web, inventé par Tim Berners-Lee au CERN, transforma radicalement notre façon de communiquer et d'accéder à l'information.
+
+            Le nouveau millénaire apporta l'essor des appareils mobiles. Les smartphones, popularisés par l'iPhone d'Apple en 2007, mirent la puissance informatique dans la poche de milliards d'utilisateurs. Cette révolution mobile changea nos habitudes de consommation, de travail et de socialisation.
+
+            Aujourd'hui, nous entrons dans l'ère de l'intelligence artificielle et de l'informatique quantique. Ces technologies promettent de résoudre des problèmes jusqu'alors insolubles, de la découverte de nouveaux médicaments à la simulation de systèmes complexes. L'avenir de l'informatique s'annonce aussi passionnant qu'imprévisible.
+        </div>
+        
+        <h3>🇫🇷 Texte Français (Test Traduction)</h3>
+        <div class="test-text">
+            Bonjour ! Nous sommes ravis de vous présenter notre nouvelle extension Chrome qui utilise l'intelligence artificielle pour améliorer votre expérience de navigation. Cette extension offre des fonctionnalités avancées de traitement de texte directement dans votre navigateur.
+        </div>
+        
+        <h3>💬 Texte Familier (Test Optimisation)</h3>
+        <div class="test-text">
+            Salut les gars ! Alors voilà, j'ai testé le truc et franchement c'est pas terrible du tout. Y'a plein de bugs et ça marche pas comme il faut. Bref, il faut vraiment qu'on bosse dessus pour que ça devienne potable.
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2><span class="emoji">🎛️</span>Tests des Contrôles</h2>
+        <div class="instructions">
+            <h4>🔧 Fonctionnalités à tester :</h4>
+            <ul>
+                <li><strong>⚡ Bouton d'activation</strong> : Active/désactive l'extension</li>
+                <li><strong>× Bouton de réduction</strong> : Cache l'interface (garde l'état)</li>
+                <li><strong>💾 Sauvegarde d'état</strong> : Rechargez la page pour voir si l'état persiste</li>
+                <li><strong>📱 Responsive</strong> : Redimensionnez la fenêtre pour tester l'adaptation</li>
+            </ul>
+        </div>
+        
+        <div class="feature-highlight">
+            <h3>🎯 États à Observer</h3>
+            <p><span class="status-indicator status-active"></span><strong>Mode Activé</strong> : Bouton ✨ avec indicateur vert</p>
+            <p><span class="status-indicator status-inactive"></span><strong>Mode Désactivé</strong> : Bouton 😴 avec indicateur rouge</p>
+            <p><span class="status-indicator status-processing"></span><strong>Mode Traitement</strong> : Indicateur orange qui tourne</p>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2><span class="emoji">🚀</span>Performance & Feedback</h2>
+        <p>Testez la fluidité de l'interface :</p>
+        <ul>
+            <li><strong>Animations</strong> : Ouverture/fermeture du panel</li>
+            <li><strong>Hover Effects</strong> : Survol des boutons d'action</li>
+            <li><strong>Feedback Visuel</strong> : Changements de couleur selon l'état</li>
+            <li><strong>Responsive</strong> : Adaptation mobile/desktop</li>
+        </ul>
+        
+        <div class="code">
+// Debug dans la console (F12)
+console.log('Magic Button State:', await chrome.storage.local.get(['magicButtonState']));
+
+// Reset de l'état si nécessaire
+chrome.storage.local.clear();
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2><span class="emoji">📊</span>Scénarios de Test Avancés</h2>
+        
+        <h3>🔄 Test de Persistance</h3>
+        <ol>
+            <li>Ouvrez l'interface Magic Button</li>
+            <li>Changez l'état (activé/désactivé)</li>
+            <li>Rechargez cette page (F5)</li>
+            <li>Vérifiez que l'état est conservé</li>
+        </ol>
+        
+        <h3>📱 Test Responsive</h3>
+        <ol>
+            <li>Ouvrez les DevTools (F12)</li>
+            <li>Activez le mode responsive</li>
+            <li>Testez différentes tailles d'écran</li>
+            <li>Vérifiez l'adaptation de l'interface</li>
+        </ol>
+        
+        <h3>⌨️ Test Accessibilité</h3>
+        <ol>
+            <li>Utilisez Tab pour naviguer</li>
+            <li>Utilisez Échap pour fermer</li>
+            <li>Testez avec un lecteur d'écran si disponible</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2><span class="emoji">🎨</span>Test du Mode Sombre</h2>
+        <p>Changez les préférences de votre système pour tester le mode sombre automatique :</p>
+        <div class="code">
+// Windows: Paramètres > Personnalisation > Couleurs > Mode sombre
+// macOS: Préférences Système > Général > Apparence > Sombre
+// Linux: Dépend de votre environnement de bureau
+        </div>
+    </div>
+
+    <div class="feature-highlight">
+        <h2>🏆 Checklist de Validation</h2>
+        <ul style="list-style: none; padding: 0;">
+            <li>□ Bouton flottant visible en haut à droite</li>
+            <li>□ Interface s'ouvre au clic sur le bouton</li>
+            <li>□ Texte sélectionné apparaît automatiquement</li>
+            <li>□ Les 4 actions fonctionnent (Corriger, Résumer, Traduire, Optimiser)</li>
+            <li>□ Bouton ⚡/💤 change l'état actif/inactif</li>
+            <li>□ Bouton × réduit l'interface</li>
+            <li>□ État sauvegardé après rechargement</li>
+            <li>□ Animations fluides et feedback visuel</li>
+            <li>□ Interface responsive sur mobile</li>
+            <li>□ Support accessibilité (Tab, Échap)</li>
+        </ul>
+    </div>
+
+    <script>
+        // Logger les interactions pour debug
+        document.addEventListener('mouseup', () => {
+            const selection = window.getSelection()?.toString();
+            if (selection && selection.length > 3) {
+                console.log('🎯 Texte sélectionné:', selection.substring(0, 50) + '...');
+            }
+        });
+        
+        // Highlighter les zones de test au survol
+        document.querySelectorAll('.test-text').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                element.style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.3)';
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                element.style.boxShadow = 'none';
+            });
+        });
+        
+        console.log('🎯 Magic Button Test Page loaded - Ready for testing!');
+    </script>
+</body>
+</html>

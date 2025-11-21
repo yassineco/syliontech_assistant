@@ -1,0 +1,50 @@
+{
+  "name": "siliyontech-assistant",
+  "version": "1.0.0",
+  "description": "Prototype SylionTech Assistant IA - Widget Multi-tenant avec Assistant Vocal/Visuel",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:web": "pnpm --filter @silyontech/web dev",
+    "dev:server": "pnpm --filter @silyontech/server dev",
+    "dev:widget": "pnpm --filter @syliontech/assistant-widget dev",
+    "dev": "concurrently \"pnpm dev:server\" \"pnpm dev:web\"",
+    "build": "pnpm -r build",
+    "build:widget": "pnpm --filter @syliontech/assistant-widget build",
+    "deploy:widget": "pnpm --filter @syliontech/assistant-widget deploy",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "type-check": "pnpm -r type-check",
+    "clean": "pnpm -r clean && rm -rf node_modules",
+    "setup": "pnpm install"
+  },
+  "keywords": [
+    "silyontech",
+    "assistant-ia",
+    "multi-tenant",
+    "widget",
+    "vertex-ai",
+    "gemini",
+    "web-speech-api",
+    "fastify",
+    "react",
+    "typescript"
+  ],
+  "author": "Yassine",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0"
+}

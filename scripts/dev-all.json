@@ -1,0 +1,5 @@
+{
+  "name": "dev:all",
+  "script": "concurrently \"pnpm --filter @sofinco/server run dev\" \"pnpm --filter @sofinco/web run dev\"",
+  "description": "Démarre simultanément le backend et frontend en mode développement"
+}

@@ -1,0 +1,27 @@
+# Fichiers à ignorer lors du déploiement Cloud Run
+node_modules/
+dist/
+*.log
+.env
+.env.*
+!.env.example
+*.md
+!README.md
+.git/
+.gitignore
+coverage/
+.vscode/
+.idea/
+*.test.ts
+*.test.js
+__tests__/
+test-*.js
+test-*.sh
+diagnose-*.js
+*.simple.ts
+*.minimal.ts
+deploy-*.sh
+run-tests.sh
+jest.config.js
+tsconfig.json
+tsconfig.simple.json

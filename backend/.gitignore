@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+dist/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Credentials - NEVER COMMIT THESE!
+.credentials/
+*.json
+!package.json
+!package-lock.json
+!tsconfig*.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

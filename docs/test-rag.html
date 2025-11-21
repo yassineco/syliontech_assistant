@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Button RAG - Test Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .status-bar {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dc3545;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.healthy {
+            background: #28a745;
+        }
+
+        .status-dot.degraded {
+            background: #ffc107;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eee;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            background: #f8f9fa;
+            display: none;
+        }
+
+        .result.error {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .result h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .result pre {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #e1e5e9;
+            font-size: 12px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .sources {
+            margin-top: 15px;
+        }
+
+        .source-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .source-meta {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .source-content {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+            border-left: 3px solid #667eea;
+            padding-left: 10px;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(to right, #dc3545, #ffc107, #28a745);
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔮 Magic Button RAG</h1>
+            <p>Interface de test pour le système de Retrieval Augmented Generation</p>
+        </div>
+
+        <!-- Barre de statut -->
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-dot" id="apiStatus"></div>
+                <span>API Status</span>
+            </div>
+            <div class="status-item">
+                <div class="status-dot" id="ragStatus"></div>
+                <span>RAG Services</span>
+            </div>
+            <div class="status-item">
+                <span id="lastUpdate">Checking...</span>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- Upload de document -->
+            <div class="section">
+                <h2>📄 Upload Document</h2>
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label for="documentContent">Contenu du document</label>
+                        <textarea id="documentContent" placeholder="Collez ici le contenu de votre document..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="fileName">Nom du fichier</label>
+                        <input type="text" id="fileName" placeholder="exemple.txt" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mimeType">Type de fichier</label>
+                        <select id="mimeType" required>
+                            <option value="text/plain">Texte (.txt)</option>
+                            <option value="text/markdown">Markdown (.md)</option>
+                            <option value="text/html">HTML (.html)</option>
+                            <option value="application/json">JSON (.json)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="docTitle">Titre (optionnel)</label>
+                        <input type="text" id="docTitle" placeholder="Titre du document">
+                    </div>
+                    <div class="form-group">
+                        <label for="docLanguage">Langue</label>
+                        <select id="docLanguage">
+                            <option value="">Auto-détection</option>
+                            <option value="fr">Français</option>
+                            <option value="en">Anglais</option>
+                            <option value="es">Espagnol</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn" id="uploadBtn">
+                        📤 Traiter le document
+                    </button>
+                </form>
+                <div class="result" id="uploadResult"></div>
+            </div>
+
+            <!-- Recherche -->
+            <div class="section">
+                <h2>🔍 Recherche Sémantique</h2>
+                <form id="searchForm">
+                    <div class="form-group">
+                        <label for="searchQuery">Votre question</label>
+                        <textarea id="searchQuery" placeholder="Que voulez-vous savoir ?" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="searchLimit">Nombre de résultats</label>
+                        <select id="searchLimit">
+                            <option value="5">5 résultats</option>
+                            <option value="10" selected>10 résultats</option>
+                            <option value="20">20 résultats</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="searchThreshold">Seuil de similarité</label>
+                        <select id="searchThreshold">
+                            <option value="0.5">50% (Large)</option>
+                            <option value="0.7" selected>70% (Recommandé)</option>
+                            <option value="0.8">80% (Strict)</option>
+                            <option value="0.9">90% (Très strict)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn" id="searchBtn">
+                        🔍 Rechercher
+                    </button>
+                </form>
+                <div class="result" id="searchResult"></div>
+            </div>
+        </div>
+
+        <!-- Génération de réponse -->
+        <div class="section full-width">
+            <h2>🤖 Génération de Réponse Augmentée</h2>
+            <form id="generateForm">
+                <div class="form-group">
+                    <label for="generateQuery">Votre question</label>
+                    <textarea id="generateQuery" placeholder="Posez votre question en langage naturel..." rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="maxChunks">Nombre max de sources</label>
+                    <select id="maxChunks">
+                        <option value="3">3 sources</option>
+                        <option value="5" selected>5 sources</option>
+                        <option value="10">10 sources</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn" id="generateBtn">
+                    ✨ Générer une réponse
+                </button>
+            </form>
+            <div class="result" id="generateResult"></div>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="section full-width">
+            <h2>📊 Statistiques du Système</h2>
+            <button class="btn" id="statsBtn" onclick="loadStats()">
+                📈 Charger les statistiques
+            </button>
+            <div class="stats-grid" id="statsGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://magic-button-api-374140035541.europe-west1.run.app';
+        
+        // État de l'application
+        let isLoading = false;
+
+        // Vérification du statut au chargement
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkHealth();
+        });
+
+        // Fonction pour vérifier la santé de l'API
+        async function checkHealth() {
+            try {
+                // Vérification API générale
+                const healthResponse = await fetch(`${API_BASE}/health`);
+                const apiStatus = document.getElementById('apiStatus');
+                
+                if (healthResponse.ok) {
+                    apiStatus.className = 'status-dot healthy';
+                } else {
+                    apiStatus.className = 'status-dot degraded';
+                }
+
+                // Vérification RAG
+                const ragResponse = await fetch(`${API_BASE}/rag/health`);
+                const ragStatus = document.getElementById('ragStatus');
+                
+                if (ragResponse.ok) {
+                    const ragData = await ragResponse.json();
+                    if (ragData.overallHealth === 'healthy') {
+                        ragStatus.className = 'status-dot healthy';
+                    } else if (ragData.overallHealth === 'degraded') {
+                        ragStatus.className = 'status-dot degraded';
+                    } else {
+                        ragStatus.className = 'status-dot';
+                    }
+                } else {
+                    ragStatus.className = 'status-dot';
+                }
+
+                document.getElementById('lastUpdate').textContent = 
+                    `Dernière vérification: ${new Date().toLocaleTimeString()}`;
+
+            } catch (error) {
+                console.error('Erreur de vérification du statut:', error);
+                document.getElementById('apiStatus').className = 'status-dot';
+                document.getElementById('ragStatus').className = 'status-dot';
+                document.getElementById('lastUpdate').textContent = 'Erreur de connexion';
+            }
+        }
+
+        // Gestion du formulaire d'upload
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (isLoading) return;
+            
+            const btn = document.getElementById('uploadBtn');
+            const result = document.getElementById('uploadResult');
+            
+            isLoading = true;
+            btn.disabled = true;
+            btn.innerHTML = '<div class="loading"></div>Traitement en cours...';
+            result.style.display = 'none';
+
+            try {
+                const formData = {
+                    content: document.getElementById('documentContent').value,
+                    fileName: document.getElementById('fileName').value,
+                    mimeType: document.getElementById('mimeType').value,
+                    title: document.getElementById('docTitle').value || undefined,
+                    language: document.getElementById('docLanguage').value || undefined
+                };
+
+                const response = await fetch(`${API_BASE}/rag/documents`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+                
+                result.className = response.ok ? 'result' : 'result error';
+                result.innerHTML = `
+                    <h3>${response.ok ? '✅ Document traité avec succès!' : '❌ Erreur de traitement'}</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                result.style.display = 'block';
+
+                if (response.ok) {
+                    // Réinitialiser le formulaire
+                    document.getElementById('uploadForm').reset();
+                }
+
+            } catch (error) {
+                result.className = 'result error';
+                result.innerHTML = `
+                    <h3>❌ Erreur de connexion</h3>
+                    <p>Impossible de se connecter au serveur: ${error.message}</p>
+                `;
+                result.style.display = 'block';
+            } finally {
+                isLoading = false;
+                btn.disabled = false;
+                btn.innerHTML = '📤 Traiter le document';
+            }
+        });
+
+        // Gestion du formulaire de recherche
+        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (isLoading) return;
+            
+            const btn = document.getElementById('searchBtn');
+            const result = document.getElementById('searchResult');
+            
+            isLoading = true;
+            btn.disabled = true;
+            btn.innerHTML = '<div class="loading"></div>Recherche...';
+            result.style.display = 'none';
+
+            try {
+                const query = document.getElementById('searchQuery').value;
+                const limit = document.getElementById('searchLimit').value;
+                const threshold = document.getElementById('searchThreshold').value;
+
+                // Validation côté client
+                if (!query.trim()) {
+                    throw new Error('Veuillez saisir une question');
+                }
+
+                const params = new URLSearchParams({
+                    q: query.trim(),
+                    limit: limit,
+                    threshold: threshold
+                });
+
+                console.log('Recherche:', `${API_BASE}/rag/search?${params}`);
+                const response = await fetch(`${API_BASE}/rag/search?${params}`);
+                const data = await response.json();
+                
+                console.log('Réponse recherche:', data);
+                
+                if (response.ok && data.success) {
+                    let resultsHtml = `
+                        <h3>🎯 ${data.totalResults || 0} résultat(s) trouvé(s)</h3>
+                        <p><strong>Temps de traitement:</strong> ${data.processingTimeMs || 'N/A'}ms</p>
+                    `;
+                    
+                    if (data.results && Array.isArray(data.results) && data.results.length > 0) {
+                        resultsHtml += '<div class="sources">';
+                        data.results.forEach((item, index) => {
+                            try {
+                                const similarity = Math.round((item.similarity || 0) * 100);
+                                const fileName = item.metadata?.fileName || item.metadata?.documentId || 'Document inconnu';
+                                const content = item.content || 'Contenu non disponible';
+                                
+                                resultsHtml += `
+                                    <div class="source-item">
+                                        <div class="source-meta">
+                                            <strong>Résultat #${index + 1}</strong> - 
+                                            Similarité: ${similarity}% - 
+                                            Document: ${fileName}
+                                        </div>
+                                        <div class="source-content">${content}</div>
+                                        <div class="confidence-bar">
+                                            <div class="confidence-fill" style="width: ${similarity}%"></div>
+                                        </div>
+                                    </div>
+                                `;
+                            } catch (itemError) {
+                                console.error('Erreur traitement item:', itemError, item);
+                                resultsHtml += `<div class="source-item">Erreur affichage résultat #${index + 1}</div>`;
+                            }
+                        });
+                        resultsHtml += '</div>';
+                    }
+                    
+                    result.className = 'result';
+                    result.innerHTML = resultsHtml;
+                } else {
+                    result.className = 'result error';
+                    result.innerHTML = `
+                        <h3>❌ Erreur de recherche</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+                result.style.display = 'block';
+
+            } catch (error) {
+                result.className = 'result error';
+                result.innerHTML = `
+                    <h3>❌ Erreur de connexion</h3>
+                    <p>Impossible de se connecter au serveur: ${error.message}</p>
+                `;
+                result.style.display = 'block';
+            } finally {
+                isLoading = false;
+                btn.disabled = false;
+                btn.innerHTML = '🔍 Rechercher';
+            }
+        });
+
+        // Gestion du formulaire de génération
+        document.getElementById('generateForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (isLoading) return;
+            
+            const btn = document.getElementById('generateBtn');
+            const result = document.getElementById('generateResult');
+            
+            isLoading = true;
+            btn.disabled = true;
+            btn.innerHTML = '<div class="loading"></div>Génération...';
+            result.style.display = 'none';
+
+            try {
+                const requestData = {
+                    query: document.getElementById('generateQuery').value,
+                    maxContextChunks: parseInt(document.getElementById('maxChunks').value),
+                    searchOptions: {
+                        threshold: 0.7,
+                        includeMetadata: true
+                    }
+                };
+
+                const response = await fetch(`${API_BASE}/rag/generate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                const data = await response.json();
+                console.log('Réponse génération:', data);
+                
+                if (response.ok && data.success) {
+                    let responseHtml = `
+                        <h3>🤖 Réponse générée</h3>
+                        <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e1e5e9; margin: 15px 0;">
+                            ${(data.response || 'Aucune réponse générée').replace(/\n/g, '<br>')}
+                        </div>
+                        <p><strong>Tokens utilisés:</strong> ${data.tokensUsed || 'N/A'}</p>
+                        <p><strong>Sources utilisées:</strong> ${data.sources?.length || 0}</p>
+                        <p><strong>Temps de traitement:</strong> ${data.processingTimeMs || 'N/A'}ms</p>
+                    `;
+                    
+                    if (data.sources && Array.isArray(data.sources) && data.sources.length > 0) {
+                        responseHtml += '<div class="sources"><h4>Sources consultées:</h4>';
+                        data.sources.forEach((source, index) => {
+                            try {
+                                const similarity = Math.round((source.similarity || 0) * 100);
+                                const fileName = source.metadata?.fileName || source.metadata?.documentId || 'Document inconnu';
+                                const content = source.content || 'Contenu non disponible';
+                                
+                                responseHtml += `
+                                    <div class="source-item">
+                                        <div class="source-meta">
+                                            <strong>Source #${index + 1}</strong> - 
+                                            Pertinence: ${similarity}% - 
+                                            Document: ${fileName}
+                                        </div>
+                                        <div class="source-content">${content.substring(0, 200)}...</div>
+                                        <div class="confidence-bar">
+                                            <div class="confidence-fill" style="width: ${similarity}%"></div>
+                                        </div>
+                                    </div>
+                                `;
+                            } catch (sourceError) {
+                                console.error('Erreur traitement source:', sourceError, source);
+                                responseHtml += `<div class="source-item">Erreur affichage source #${index + 1}</div>`;
+                            }
+                        });
+                        responseHtml += '</div>';
+                    }
+                    
+                    result.className = 'result';
+                    result.innerHTML = responseHtml;
+                } else {
+                    result.className = 'result error';
+                    result.innerHTML = `
+                        <h3>❌ Erreur de génération</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+                result.style.display = 'block';
+
+            } catch (error) {
+                result.className = 'result error';
+                result.innerHTML = `
+                    <h3>❌ Erreur de connexion</h3>
+                    <p>Impossible de se connecter au serveur: ${error.message}</p>
+                `;
+                result.style.display = 'block';
+            } finally {
+                isLoading = false;
+                btn.disabled = false;
+                btn.innerHTML = '✨ Générer une réponse';
+            }
+        });
+
+        // Chargement des statistiques
+        async function loadStats() {
+            const btn = document.getElementById('statsBtn');
+            const grid = document.getElementById('statsGrid');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<div class="loading"></div>Chargement...';
+
+            try {
+                const response = await fetch(`${API_BASE}/rag/stats`);
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    const stats = data.stats;
+                    grid.innerHTML = `
+                        <div class="stat-card">
+                            <h3>${stats.totalDocuments}</h3>
+                            <p>Documents</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>${stats.totalChunks}</h3>
+                            <p>Chunks</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>${stats.totalEmbeddings}</h3>
+                            <p>Embeddings</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>${stats.indexHealth}</h3>
+                            <p>Santé Index</p>
+                        </div>
+                    `;
+                } else {
+                    grid.innerHTML = '<p>Erreur lors du chargement des statistiques</p>';
+                }
+
+            } catch (error) {
+                grid.innerHTML = `<p>Erreur de connexion: ${error.message}</p>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '📈 Charger les statistiques';
+            }
+        }
+
+        // Vérification périodique du statut
+        setInterval(checkHealth, 30000); // Toutes les 30 secondes
+    </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+name: CI/CD Magic Button
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: europe-west1
+  SERVICE_NAME: magic-button-api
+
+jobs:
+  # Tests et validation
+  test:
+    name: Tests et Lint
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm run install:all
+
+    - name: TypeScript check
+      run: npm run type-check
+
+    - name: Lint
+      run: npm run lint
+
+    - name: Test backend
+      run: npm run test:backend
+
+    - name: Test extension
+      run: npm run test:extension
+
+    - name: Build backend
+      run: npm run build:backend
+
+    - name: Build extension
+      run: npm run build:extension
+
+  # Déploiement backend sur Cloud Run
+  deploy-backend:
+    name: Deploy Backend
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - name: Setup Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Configure Docker to use gcloud as a credential helper
+      run: gcloud auth configure-docker
+
+    - name: Build Docker image
+      run: |
+        cd backend
+        docker build -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA .
+        docker build -t gcr.io/$PROJECT_ID/$SERVICE_NAME:latest .
+
+    - name: Push Docker image
+      run: |
+        docker push gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA
+        docker push gcr.io/$PROJECT_ID/$SERVICE_NAME:latest
+
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy $SERVICE_NAME \
+          --image gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA \
+          --platform managed \
+          --region $REGION \
+          --allow-unauthenticated \
+          --memory 2Gi \
+          --cpu 1 \
+          --max-instances 10 \
+          --set-env-vars="NODE_ENV=production,PROJECT_ID=$PROJECT_ID,REGION=$REGION" \
+          --quiet
+
+    - name: Get service URL
+      run: |
+        SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --platform managed --region $REGION --format 'value(status.url)')
+        echo "Service deployed at: $SERVICE_URL"
+        
+        # Test deployment
+        curl -f $SERVICE_URL/health || exit 1
+
+  # Build extension pour release
+  build-extension:
+    name: Build Extension Release
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        cd extension
+        npm ci
+
+    - name: Build extension
+      run: |
+        cd extension
+        npm run build
+
+    - name: Create release package
+      run: |
+        cd extension/dist
+        zip -r ../magic-button-extension-${{ github.sha }}.zip .
+
+    - name: Upload extension artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: magic-button-extension
+        path: extension/magic-button-extension-*.zip
+        retention-days: 30
+
+  # Scan de sécurité
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  # Notification
+  notify:
+    name: Notification
+    needs: [deploy-backend, build-extension]
+    runs-on: ubuntu-latest
+    if: always() && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Notify success
+      if: needs.deploy-backend.result == 'success' && needs.build-extension.result == 'success'
+      run: |
+        echo "✅ Deployment successful!"
+        echo "Backend deployed to Cloud Run"
+        echo "Extension built and packaged"
+
+    - name: Notify failure
+      if: needs.deploy-backend.result == 'failure' || needs.build-extension.result == 'failure'
+      run: |
+        echo "❌ Deployment failed!"
+        exit 1
