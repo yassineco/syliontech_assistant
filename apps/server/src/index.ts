@@ -4,6 +4,7 @@ import { env } from './config/env.js';
 import assistantRoute from './routes/assistant.js';
 import simulateRoute from './routes/simulate.js';
 import ragRoute from './routes/rag.js';
+import v1ChatRoute from './routes/v1/chat.js';
 import { buildIndexFromFolder } from './rag/index.js';
 import path from 'path';
 
@@ -137,6 +138,9 @@ async function createServer() {
 
   // Routes RAG
   await fastify.register(ragRoute);
+
+  // Routes API v1 multi-tenant
+  await fastify.register(v1ChatRoute);
 
   // ==========================================
   // INITIALISATION SYSTÈME RAG

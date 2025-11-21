@@ -5,7 +5,7 @@ describe('Service Finance', () => {
   describe('calcMonthly', () => {
     it('calcule correctement une mensualité avec taux', () => {
       const monthly = calcMonthly(15000, 48, 6.1);
-      expect(monthly).toBeCloseTo(352.24, 1); // Tolérance 0.1€
+      expect(monthly).toBeCloseTo(352.96, 2); // Tolérance 0.01€ (2 décimales)
     });
 
     it('calcule correctement avec taux zéro', () => {
