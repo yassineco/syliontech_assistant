@@ -1,8 +1,8 @@
-# ⚖️ Décisions techniques - Magic Button
+# ⚖️ Décisions techniques - SylionTech Assistant
 
 ## Vue d'ensemble
 
-Ce document recense les principales décisions techniques prises pendant le développement de Magic Button, avec les justifications et alternatives considérées.
+Ce document recense les principales décisions techniques prises pendant le développement de SylionTech Assistant, avec les justifications et alternatives considérées.
 
 ## Architecture générale
 

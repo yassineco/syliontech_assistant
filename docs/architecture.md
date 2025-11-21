@@ -1,9 +1,9 @@
-# 🏗️ Architecture Magic Button RAG System
+# 🏗️ Architecture SylionTech Assistant RAG System
 *Version finale - 25 octobre 2025*
 
 ## 🎯 **Vue d'ensemble**
 
-Magic Button est un système d'assistance IA complet combinant :
+SylionTech Assistant est un système d'assistance IA complet combinant :
 - **Extension Chrome MV3** pour interface utilisateur
 - **API Backend Cloud Run** pour traitement IA et RAG
 - **Pipeline RAG intelligent** avec réponses contextuelles
@@ -306,7 +306,7 @@ Magic Button est un système d'assistance IA complet combinant :
 
 ## 🎯 **Conclusion Architecturale**
 
-Magic Button RAG System représente une **architecture moderne et scalable** combinant :
+SylionTech Assistant RAG System représente une **architecture moderne et scalable** combinant :
 
 ✅ **Frontend réactif** avec React + TypeScript  
 ✅ **Backend cloud-native** sur Google Cloud Run  
@@ -321,7 +321,7 @@ Le système est **production-ready** et prêt pour déploiement en environnement
 ---
 
 *Architecture documentée le 25 octobre 2025*  
-*Magic Button RAG System - Version finale*
+*SylionTech Assistant RAG System - Version finale*
 
 ## Flux de données
 

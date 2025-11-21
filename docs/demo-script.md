@@ -1,4 +1,4 @@
-# 🎬 Script de Démonstration Magic Button
+# 🎬 Script de Démonstration SylionTech Assistant
 
 ## Vue d'ensemble de la démo
 
@@ -38,7 +38,7 @@
 **Objectif** : Présenter le contexte et les enjeux
 
 ```
-🎤 "Bonjour ! Je vais vous présenter Magic Button, un MVP complet
+🎤 "Bonjour ! Je vais vous présenter SylionTech Assistant, un MVP complet
 qui démontre la maîtrise de l'écosystème GCP pour l'intelligence artificielle.
 
 Ce projet illustre :
@@ -114,7 +114,7 @@ contient plusieur erreurs dorthographe et de gramaire."
 Actions :
 1. Naviguer vers une page web quelconque
 2. Sélectionner le texte ci-dessus
-3. Ouvrir l'extension Magic Button
+3. Ouvrir l'extension SylionTech Assistant
 4. Cliquer "Corriger"
 5. Montrer le résultat corrigé
 6. Copier le résultat
@@ -353,7 +353,7 @@ Toutes documentées dans docs/decisions.md"
 ## 🎯 Conclusion de démo
 
 ```
-🎤 "En résumé, Magic Button démontre :
+🎤 "En résumé, SylionTech Assistant démontre :
 
 ✅ Maîtrise complète de l'écosystème GCP
 ✅ Architecture moderne et scalable

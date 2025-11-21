@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "=== Test de connectivité API Sofinco Assistant ==="
+echo "=== Test de connectivité API SylionTech Assistant ==="
 echo
 
 # Test backend sur port 3001

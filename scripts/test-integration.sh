@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "=== Test d'intégration Sofinco Assistant ==="
+echo "=== Test d'intégration SylionTech Assistant ==="
 echo
 
 # Attendre que le serveur soit prêt

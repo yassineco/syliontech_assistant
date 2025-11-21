@@ -1,4 +1,4 @@
-# 🚀 Guide de Test - Magic Button Extension
+# 🚀 Guide de Test - SylionTech Assistant Extension
 
 ## 📦 Installation de l'Extension Chrome
 
@@ -14,7 +14,7 @@ npm run build
 2. Activez le "Mode développeur" (coin supérieur droit)
 3. Cliquez sur "Charger l'extension non empaquetée"
 4. Sélectionnez le dossier `extension/dist`
-5. L'extension Magic Button apparaît dans votre barre d'outils
+5. L'extension SylionTech Assistant apparaît dans votre barre d'outils
 
 ## 🧪 Tests Fonctionnels
 
@@ -125,4 +125,4 @@ L'extension est considérée comme fonctionnelle si :
 - **Compatible** : Chrome MV3, Edge, Brave
 - **Backend** : Cloud Run (auto-scaling)
 
-🎉 **MVP Magic Button validé et opérationnel !**
+🎉 **MVP SylionTech Assistant validé et opérationnel !**

@@ -1,4 +1,4 @@
-# CHANGELOG - Magic Button Backend
+# CHANGELOG - SylionTech Assistant Backend
 
 ## [Version 1.2.0] - 25 octobre 2025 - 19:35 UTC
 

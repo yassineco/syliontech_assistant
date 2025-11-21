@@ -1,8 +1,8 @@
-# 🎓 Plan Pédagogique Magic Button
+# 🎓 Plan Pédagogique SylionTech Assistant
 
 ## Vue d'ensemble de la formation
 
-Ce projet Magic Button est conçu comme un parcours d'apprentissage complet pour maîtriser l'écosystème Google Cloud Platform appliqué à l'intelligence artificielle, avec un focus sur Vertex AI et l'architecture serverless.
+Ce projet SylionTech Assistant est conçu comme un parcours d'apprentissage complet pour maîtriser l'écosystème Google Cloud Platform appliqué à l'intelligence artificielle, avec un focus sur Vertex AI et l'architecture serverless.
 
 ## 🎯 Objectifs d'apprentissage
 

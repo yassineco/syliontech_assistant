@@ -117,7 +117,7 @@ npm run deploy
 4. Obtenir une traduction fluide et contextuelle
 
 ### **📚 Assistant RAG**
-1. Ouvrir l'extension Magic Button
+1. Ouvrir l'extension SylionTech Assistant
 2. Onglet "Assistant RAG"
 3. Uploader un document texte
 4. Poser des questions sur le contenu
@@ -265,12 +265,12 @@ Ce projet est sous licence MIT. Voir [LICENSE](LICENSE) pour plus de détails.
 
 - **Repository** : [github.com/yassineco/MB](https://github.com/yassineco/MB)
 - **Issues** : [github.com/yassineco/MB/issues](https://github.com/yassineco/MB/issues)
-- **API Status** : [magic-button-api-374140035541.europe-west1.run.app/health](https://magic-button-api-374140035541.europe-west1.run.app/health)
+- **API Status** : [syliontech-assistant-api.run.app/health](https://syliontech-assistant-api.run.app/health)
 
 ---
 
 <p align="center">
-  <strong>🎯 Magic Button - Votre assistant IA intelligent pour une productivité augmentée</strong>
+  <strong>🎯 SylionTech Assistant - Votre assistant IA intelligent pour une productivité augmentée</strong>
 </p>
 
 <p align="center">

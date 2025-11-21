@@ -1,4 +1,4 @@
-# 🚀 Guide de Démarrage Rapide - Sofinco Assistant
+# 🚀 Guide de Démarrage Rapide - SylionTech Assistant
 
 ## ⚡ Démarrage en 3 minutes
 
