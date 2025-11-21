@@ -1,5 +1,5 @@
 {
-  "name": "@silyontech/server",
+  "name": "@syliontech/server",
   "version": "1.0.0",
   "description": "SylionTech Assistant API Server - Fastify + Vertex AI Gemini",
   "type": "module",

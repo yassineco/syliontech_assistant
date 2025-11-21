@@ -1,5 +1,5 @@
 {
-  "name": "magic-button-backend",
+  "name": "@syliontech/legacy-backend",
   "version": "1.0.0",
   "description": "Magic Button API Backend - Cloud Run + Vertex AI",
   "main": "dist/server.js",

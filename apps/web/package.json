@@ -1,5 +1,5 @@
 {
-  "name": "@silyontech/web",
+  "name": "@syliontech/web",
   "version": "1.0.0",
   "description": "SylionTech Assistant Frontend - React + Vite + Web Speech API",
   "type": "module",

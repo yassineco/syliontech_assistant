@@ -23,11 +23,11 @@ echo -e "${YELLOW}📦 Installation des dépendances...${NC}"
 pnpm install
 
 echo -e "${YELLOW}🔧 Démarrage du backend (port 3001)...${NC}"
-pnpm --filter @sofinco/server run dev > logs/backend.log 2>&1 &
+pnpm --filter @syliontech/server run dev > logs/backend.log 2>&1 &
 BACKEND_PID=$!
 
 echo -e "${YELLOW}🌐 Démarrage du frontend (port 5173)...${NC}"
-pnpm --filter @sofinco/web run dev > logs/frontend.log 2>&1 &
+pnpm --filter @syliontech/web run dev > logs/frontend.log 2>&1 &
 FRONTEND_PID=$!
 
 echo -e "${BLUE}⏳ Attente de démarrage des services...${NC}"

@@ -1,5 +1,5 @@
 {
-  "name": "magic-button-extension",
+  "name": "@syliontech/browser-extension",
   "version": "1.0.0",
   "description": "Magic Button Chrome Extension - AI Assistant",
   "type": "module",

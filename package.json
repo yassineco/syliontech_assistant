@@ -1,5 +1,5 @@
 {
-  "name": "siliyontech-assistant",
+  "name": "syliontech-assistant",
   "version": "1.0.0",
   "description": "Prototype SylionTech Assistant IA - Widget Multi-tenant avec Assistant Vocal/Visuel",
   "private": true,
@@ -7,8 +7,8 @@
     "apps/*"
   ],
   "scripts": {
-    "dev:web": "pnpm --filter @silyontech/web dev",
-    "dev:server": "pnpm --filter @silyontech/server dev",
+    "dev:web": "pnpm --filter @syliontech/web dev",
+    "dev:server": "pnpm --filter @syliontech/server dev",
     "dev:widget": "pnpm --filter @syliontech/assistant-widget dev",
     "dev": "concurrently \"pnpm dev:server\" \"pnpm dev:web\"",
     "build": "pnpm -r build",
