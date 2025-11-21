@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "sylion-tech-assistant"
+  },
+  "targets": {
+    "sylion-tech-assistant": {
+      "hosting": {
+        "demo": ["syliontech-demo-dev"]
+      }
+    }
+  }
+}

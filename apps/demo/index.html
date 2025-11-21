@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SylionTech Assistant - Démo Interactive</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>🤖 SylionTech Assistant</h1>
+                <p class="tagline">Intelligence Artificielle Multi-Tenant</p>
+            </div>
+            <div class="status" id="status">
+                <span class="status-dot"></span>
+                <span>Prêt</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <section class="hero">
+                <h2>Démo Interactive</h2>
+                <p>Testez notre assistant IA avec capacités vocales et chat en temps réel</p>
+            </section>
+
+            <section class="demo-controls">
+                <div class="control-group">
+                    <h3>🎯 Actions de Test</h3>
+                    <div class="buttons">
+                        <button id="trigger-assistant" class="btn btn-primary">
+                            💬 Ouvrir l'Assistant
+                        </button>
+                        <button id="test-voice" class="btn btn-secondary">
+                            🎤 Test Vocal
+                        </button>
+                        <button id="test-api" class="btn btn-tertiary">
+                            🔗 Test API Direct
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <h3>⚙️ Configuration</h3>
+                    <div class="config-grid">
+                        <div class="config-item">
+                            <label>API Endpoint:</label>
+                            <input type="url" id="api-endpoint" value="https://syliontech-api-dev-xxxxx-ew.a.run.app" readonly>
+                        </div>
+                        <div class="config-item">
+                            <label>Tenant ID:</label>
+                            <input type="text" id="tenant-id" value="syliontech-demo" readonly>
+                        </div>
+                        <div class="config-item">
+                            <label>Langue:</label>
+                            <select id="language-select">
+                                <option value="fr" selected>Français</option>
+                                <option value="en">English</option>
+                            </select>
+                        </div>
+                        <div class="config-item">
+                            <label>Thème:</label>
+                            <select id="theme-select">
+                                <option value="blue" selected>Bleu</option>
+                                <option value="green">Vert</option>
+                                <option value="purple">Violet</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="features">
+                <h3>🚀 Fonctionnalités Démontrées</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h4>Chat Intelligent</h4>
+                        <p>Assistant conversationnel avec RAG et LLM intégré</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎤</div>
+                        <h4>Reconnaissance Vocale</h4>
+                        <p>Interaction naturelle par commandes vocales</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔐</div>
+                        <h4>Multi-Tenant</h4>
+                        <p>Architecture sécurisée avec clés API dédiées</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h4>Personnalisable</h4>
+                        <p>Thèmes et configuration adaptés à votre marque</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="logs">
+                <h3>📋 Journal des Tests</h3>
+                <div class="log-container">
+                    <pre id="log-output">Prêt pour les tests...</pre>
+                </div>
+                <button id="clear-logs" class="btn btn-small">Effacer</button>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 SylionTech Assistant - Démo Technique</p>
+            <div class="links">
+                <a href="https://syliontech-admin-dev.web.app" target="_blank">🏛️ Console Admin</a>
+                <a href="https://github.com/yassineco/syliontech_assistant" target="_blank">📚 Documentation</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Configuration du Widget SylionTech -->
+    <script>
+        window.SylionTechConfig = {
+            apiUrl: 'https://syliontech-api-dev-xxxxx-ew.a.run.app',
+            apiKey: 'demo-key-123',
+            tenantId: 'syliontech-demo',
+            theme: 'blue',
+            position: 'bottom-right',
+            language: 'fr'
+        };
+    </script>
+
+    <!-- Widget SylionTech (sera copié depuis la compilation) -->
+    <script src="assistant.js" defer></script>
+
+    <!-- Scripts de la démo -->
+    <script src="demo.js" defer></script>
+</body>
+</html>

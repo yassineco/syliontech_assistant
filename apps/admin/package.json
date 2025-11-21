@@ -6,11 +6,14 @@
   "scripts": {
     "dev": "next dev --port 3002",
     "build": "next build",
+    "build:prod": "next build",
     "start": "next start --port 3002",
     "lint": "next lint",
     "test": "vitest",
     "type-check": "tsc --noEmit",
-    "clean": "rm -rf .next node_modules"
+    "clean": "rm -rf .next dist node_modules",
+    "deploy:firebase": "pnpm run build:prod && firebase deploy --only hosting:admin",
+    "deploy:dev": "pnpm run deploy:firebase"
   },
   "dependencies": {
     "next": "^14.0.3",
