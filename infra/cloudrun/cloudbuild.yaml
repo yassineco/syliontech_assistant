@@ -10,21 +10,21 @@ steps:
       - '-f'
       - 'infra/cloudrun/Dockerfile'
       - '-t'
-      - 'gcr.io/$PROJECT_ID/silyontech-assistant-api:$COMMIT_SHA'
+      - 'gcr.io/$PROJECT_ID/sylion-tech-assistant-api:$COMMIT_SHA'
       - '-t'
-      - 'gcr.io/$PROJECT_ID/silyontech-assistant-api:latest'
+      - 'gcr.io/$PROJECT_ID/sylion-tech-assistant-api:latest'
       - '.'
 
   # 2. Push l'image vers Container Registry
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'gcr.io/$PROJECT_ID/silyontech-assistant-api:$COMMIT_SHA'
+      - 'gcr.io/$PROJECT_ID/sylion-tech-assistant-api:$COMMIT_SHA'
 
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'gcr.io/$PROJECT_ID/silyontech-assistant-api:latest'
+      - 'gcr.io/$PROJECT_ID/sylion-tech-assistant-api:latest'
 
   # 3. Déploiement sur Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -33,7 +33,7 @@ steps:
       - 'deploy'
       - 'silyontech-assistant-api'
       - '--image'
-      - 'gcr.io/$PROJECT_ID/silyontech-assistant-api:$COMMIT_SHA'
+      - 'gcr.io/$PROJECT_ID/sylion-tech-assistant-api:$COMMIT_SHA'
       - '--region'
       - 'europe-west1'
       - '--platform'

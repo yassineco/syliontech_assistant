@@ -10,7 +10,7 @@ echo "🚀 Setup Infrastructure SylionTech Assistant"
 echo "=============================================="
 
 # Configuration
-PROJECT_PREFIX="silyontech-assistant"
+PROJECT_PREFIX="sylion-tech-assistant"
 REGION="europe-west1"
 DOMAIN_BASE="silyontech.com"
 
@@ -64,22 +64,15 @@ check_prerequisites() {
 
 # Création des projets GCP
 create_gcp_projects() {
-    log_info "Création des projets GCP..."
+    log_info "Configuration du projet GCP existant..."
     
-    # Projet Production
-    PROD_PROJECT_ID="${PROJECT_PREFIX}-prod"
-    DEV_PROJECT_ID="${PROJECT_PREFIX}-dev"
+    # Utilisation du projet créé: sylion-tech-assistant
+    PROD_PROJECT_ID="sylion-tech-assistant"
     
-    log_info "Création du projet production: $PROD_PROJECT_ID"
-    gcloud projects create $PROD_PROJECT_ID --name="SylionTech Assistant Production" || log_warning "Projet existe déjà"
-    
-    log_info "Création du projet développement: $DEV_PROJECT_ID"
-    gcloud projects create $DEV_PROJECT_ID --name="SylionTech Assistant Development" || log_warning "Projet existe déjà"
-    
-    # Configuration du projet par défaut
+    log_info "Configuration du projet production: $PROD_PROJECT_ID"
     gcloud config set project $PROD_PROJECT_ID
     
-    log_success "Projets GCP créés"
+    log_success "Projet GCP configuré"
 }
 
 # Activation des APIs
