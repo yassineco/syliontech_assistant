@@ -5,15 +5,15 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-echo "🚀 Deploying Magic Button API to Cloud Run"
+echo "🚀 Deploying SylionTech Assistant API to Cloud Run"
 echo "=========================================="
 echo "Working directory: $(pwd)"
 echo ""
 
 # Variables
-PROJECT_ID="magic-button-demo"
+PROJECT_ID="sylion-tech-assistant"
 REGION="europe-west1"
-SERVICE_NAME="magic-button-api"
+SERVICE_NAME="syliontech-assistant-api"
 IMAGE_NAME="gcr.io/${PROJECT_ID}/${SERVICE_NAME}"
 
 # Build locally
@@ -34,7 +34,7 @@ gcloud run deploy ${SERVICE_NAME} \
   --memory 2Gi \
   --cpu 1 \
   --max-instances 10 \
-  --set-env-vars="NODE_ENV=production,PROJECT_ID=magic-button-demo,REGION=europe-west1,VERTEX_LOCATION=europe-west1,GENAI_MODEL=gemini-2.5-flash,BUCKET_NAME=magic-button-documents,HMAC_SECRET=production-secret-key-very-long-and-secure-for-cloud-run-deployment-2025,EMBEDDING_MODEL=text-embedding-004,FIRESTORE_DATABASE_ID=(default),LOG_LEVEL=info,USE_REAL_EMBEDDINGS=true,USE_REAL_VECTOR_DB=true" \
+  --set-env-vars="NODE_ENV=production,PROJECT_ID=sylion-tech-assistant,REGION=europe-west1,VERTEX_LOCATION=europe-west1,GENAI_MODEL=gemini-2.5-flash,BUCKET_NAME=sylion-tech-assistant-documents,HMAC_SECRET=production-secret-key-very-long-and-secure-for-cloud-run-deployment-2025,EMBEDDING_MODEL=text-embedding-004,FIRESTORE_DATABASE_ID=(default),LOG_LEVEL=info,USE_REAL_EMBEDDINGS=true,USE_REAL_VECTOR_DB=true" \
   --project ${PROJECT_ID}
 
 echo "✅ Deployment complete!"

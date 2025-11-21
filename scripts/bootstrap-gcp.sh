@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Magic Button - Bootstrap GCP Infrastructure
+# SylionTech Assistant - Bootstrap GCP Infrastructure
 # Ce script configure automatiquement tous les services GCP nécessaires
 
 set -euo pipefail
@@ -13,12 +13,12 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-PROJECT_ID="${PROJECT_ID:-magic-button-demo}"
+PROJECT_ID="${PROJECT_ID:-sylion-tech-assistant}"
 REGION="${REGION:-europe-west1}"
 VERTEX_LOCATION="${VERTEX_LOCATION:-us-central1}"
-SERVICE_ACCOUNT_NAME="magic-button-api"
+SERVICE_ACCOUNT_NAME="syliontech-assistant-api"
 
-echo -e "${BLUE}🪄 Magic Button - Bootstrap GCP Infrastructure${NC}"
+echo -e "${BLUE}🪄 SylionTech Assistant - Bootstrap GCP Infrastructure${NC}"
 echo "=================================================="
 echo "Project ID: $PROJECT_ID"
 echo "Region: $REGION"
@@ -115,7 +115,7 @@ create_service_account() {
         log_warning "Service account $sa_email already exists"
     else
         gcloud iam service-accounts create "$SERVICE_ACCOUNT_NAME" \
-            --display-name="Magic Button API Service Account" \
+            --display-name="SylionTech Assistant API Service Account" \
             --description="Service account for Magic Button API on Cloud Run"
         log_success "Service account created: $sa_email"
     fi
@@ -229,7 +229,7 @@ create_env_file() {
 # GCP Configuration
 PROJECT_ID=$PROJECT_ID
 REGION=$REGION
-SERVICE_NAME=magic-button-api
+SERVICE_NAME=syliontech-assistant-api
 VERTEX_LOCATION=$VERTEX_LOCATION
 
 # Vertex AI Models
@@ -295,7 +295,7 @@ print_next_steps() {
     echo "3. Deploy backend: npm run deploy:backend"
     echo ""
     echo "Useful commands:"
-    echo "- View logs: gcloud run logs tail magic-button-api"
+    echo "- View logs: gcloud run logs tail syliontech-assistant-api"
     echo "- Open Cloud Console: gcloud console"
     echo "- Check quotas: gcloud compute project-info describe"
     echo ""

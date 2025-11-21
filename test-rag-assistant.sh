@@ -3,7 +3,7 @@
 # Script de test de l'assistant avec RAG
 
 echo "🚀 Démarrage du serveur backend..."
-cd /media/yassine/IA/Projects/konecta/sofinco-assistant/apps/server
+cd /media/yassine/IA/Projects/SylionTech/syliontech_assistant/apps/server
 
 # Démarrer le serveur en arrière-plan
 npm run dev > /tmp/sofinco-server.log 2>&1 &

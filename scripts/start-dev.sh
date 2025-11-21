@@ -7,7 +7,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}🚀 Démarrage Sofinco Assistant${NC}"
+echo -e "${BLUE}🚀 Démarrage SylionTech Assistant${NC}"
 echo "=================================="
 
 # Vérifier que nous sommes dans le bon répertoire

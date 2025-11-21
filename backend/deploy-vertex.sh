@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🚀 DÉPLOIEMENT VERTEX AI - Magic Button Backend"
+echo "🚀 DÉPLOIEMENT VERTEX AI - SylionTech Assistant Backend"
 echo "==============================================="
 echo ""
 
@@ -27,7 +27,7 @@ echo "✅ Compilation réussie"
 echo ""
 
 echo "🌐 Informations de déploiement:"
-echo "   - API: https://magic-button-api-374140035541.europe-west1.run.app"
+echo "   - API: https://syliontech-assistant-api-374140035541.europe-west1.run.app"
 echo "   - Mode: Vertex AI activé (plus de simulation)"
 echo "   - Route: /api/genai/process"
 echo ""

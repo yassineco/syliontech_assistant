@@ -1,3 +1,4 @@
+# TODO: Update URLs after deploying syliontech-assistant-api to Cloud Run
 #!/bin/bash
 
 echo "🧪 TEST COMPLET - Magic Button Extension"

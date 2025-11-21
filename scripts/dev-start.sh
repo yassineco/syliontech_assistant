@@ -5,7 +5,7 @@
 
 set -e
 
-echo "🪄 Magic Button - Development Setup"
+echo "🪄 SylionTech Assistant - Development Setup"
 echo "======================================"
 
 # Colors
