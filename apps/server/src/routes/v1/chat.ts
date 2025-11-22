@@ -2,7 +2,7 @@ import type { FastifyPluginAsync } from 'fastify';
 import type { AuthenticatedRequest } from '../../middleware/multitenant.js';
 import { protectedRoute } from '../../middleware/multitenant.js';
 import { generateAnswer, detectIntention } from '../../services/llm.js';
-import { searchIndex } from '../../rag/index.js';
+import { ragSearchService } from '../../services/ragSearch.js';
 import crypto from 'crypto';
 
 // ===========================================
@@ -113,7 +113,7 @@ const v1ChatRoute: FastifyPluginAsync = async (fastify) => {
     const requestId = crypto.randomUUID();
     
     try {
-      const { messages, session = {}, options = {} } = request.body;
+      const { messages, session = {}, options = {} } = request.body as ChatRequest;
       const { tenant } = request.tenantContext!;
       
       // Configuration par défaut basée sur le tenant
@@ -127,76 +127,112 @@ const v1ChatRoute: FastifyPluginAsync = async (fastify) => {
 
       // Dernier message utilisateur
       const userMessage = messages[messages.length - 1];
-      if (userMessage.role !== 'user') {
-        return reply.status(400).send({
-          success: false,
-          error: {
-            code: 'INVALID_MESSAGE_ORDER',
-            message: 'Le dernier message doit être de type "user"',
+      if (!userMessage || userMessage.role !== 'user') {
+        const errorResponse: ChatResponse = {
+          id: requestId,
+          object: 'chat.completion',
+          created: Math.floor(Date.now() / 1000),
+          model: config.model,
+          choices: [
+            {
+              index: 0,
+              message: {
+                role: 'assistant',
+                content: 'Erreur: Le dernier message doit être de type "user"',
+              },
+              finishReason: 'stop',
+            },
+          ],
+          usage: {
+            promptTokens: 0,
+            completionTokens: 0,
+            totalTokens: 0,
           },
-        });
+          metadata: {
+            intent: 'error',
+            confidence: 0,
+            citations: [],
+            processingTime: Date.now() - startTime,
+          },
+        };
+        
+        return reply.status(400).send(errorResponse);
       }
 
       // Détection d'intention
       const intent = detectIntention(userMessage.content);
       let citations: any[] = [];
-      let ragContext = '';
+      let ragChunks: any[] = [];
 
       // Recherche RAG si activée
       if (config.enableRAG && tenant.settings.enableRAG) {
-        console.log(`RAG search for tenant: ${tenant.id}`);
+        console.log(`🔍 Recherche RAG pour tenant: ${tenant.id}`);
         
-        // Recherche dans les documents du tenant
-        const ragResults = await searchIndex(userMessage.content, {
-          tenantId: tenant.id,
-          limit: 5,
-          threshold: 0.7,
-        });
+        try {
+          // Recherche dans les documents du tenant avec le nouveau service
+          const ragResults = await ragSearchService.quickSearch(
+            tenant.id,
+            userMessage.content,
+            5
+          );
 
-        if (ragResults.length > 0) {
-          ragContext = ragResults.map(r => r.content).join('\n\n');
-          citations = ragResults.map(r => ({
-            source: r.source || 'Document interne',
-            title: r.metadata?.title || 'Document',
-            url: r.metadata?.url,
-          }));
+          if (ragResults.chunks.length > 0) {
+            // Convertir les chunks RAG au format attendu par generateAnswer
+            ragChunks = ragResults.chunks.map(chunk => ({
+              id: `${chunk.metadata.documentId}-${chunk.metadata.chunkIndex}`,
+              content: chunk.text,
+              metadata: {
+                source: chunk.metadata.fileName,
+                title: `Document: ${chunk.metadata.fileName}`,
+                score: chunk.score,
+                documentId: chunk.metadata.documentId,
+                chunkIndex: chunk.metadata.chunkIndex,
+              }
+            }));
+            
+            citations = ragResults.chunks.map(chunk => ({
+              source: chunk.metadata.fileName,
+              title: `Document: ${chunk.metadata.fileName}`,
+              snippet: chunk.text.length > 200 
+                ? chunk.text.substring(0, 200) + '...' 
+                : chunk.text,
+              score: chunk.score,
+              documentId: chunk.metadata.documentId,
+            }));
+            
+            console.log(`✅ RAG trouvé ${ragResults.chunks.length} chunks pertinents`);
+          } else {
+            console.log(`📭 Aucun contenu RAG trouvé pour la requête`);
+          }
+        } catch (error) {
+          console.error('❌ Erreur recherche RAG:', error);
+          // Continuer sans RAG en cas d'erreur
         }
       }
 
       // Préparation du contexte de conversation
-      const conversationHistory = messages.slice(-10).map(msg => ({
+      const conversationHistory = messages.slice(-10).map((msg: any) => ({
         role: msg.role,
-        content: msg.content,
+        message: msg.content,
       }));
 
-      // Génération de la réponse
+      // Génération de la réponse avec les chunks RAG
       const llmResponse = await generateAnswer(
         userMessage.content,
-        conversationHistory,
-        {
-          ragContext,
-          tenantConfig: {
-            name: tenant.name,
-            domain: tenant.domain,
-            branding: tenant.branding,
-          },
-          model: config.model,
-          temperature: config.temperature,
-          maxTokens: config.maxTokens,
-        }
+        ragChunks, // Passer les chunks au lieu du contexte texte
+        conversationHistory
       );
 
       // Sauvegarde de la conversation (si session fournie)
       if (session.id) {
-        await saveConversation({
+        const conversationData: Parameters<typeof saveConversation>[0] = {
           tenantId: tenant.id,
           sessionId: session.id,
-          userId: session.userId,
           messages: [
             ...messages,
             {
               role: 'assistant' as const,
-              content: llmResponse.content,
+              content: llmResponse.reply, // Utiliser reply au lieu de content
               timestamp: new Date().toISOString(),
             },
           ],
@@ -206,7 +242,14 @@ const v1ChatRoute: FastifyPluginAsync = async (fastify) => {
             model: config.model,
             ...session.metadata,
           },
-        });
+        };
+
+        // N'inclure userId que s'il existe
+        if (session.userId) {
+          conversationData.userId = session.userId;
+        }
+
+        await saveConversation(conversationData);
       }
 
       // Enregistrement de l'événement analytics
@@ -216,7 +259,7 @@ const v1ChatRoute: FastifyPluginAsync = async (fastify) => {
         properties: {
           intent,
           model: config.model,
-          hasRAG: ragContext.length > 0,
+          hasRAG: ragChunks.length > 0, // Utiliser ragChunks au lieu de ragContext
           citationsCount: citations.length,
           sessionId: session.id,
           userId: session.userId,
@@ -236,19 +279,19 @@ const v1ChatRoute: FastifyPluginAsync = async (fastify) => {
             index: 0,
             message: {
               role: 'assistant',
-              content: llmResponse.content,
+              content: llmResponse.reply, // Utiliser reply au lieu de content
             },
             finishReason: 'stop',
           },
         ],
         usage: {
-          promptTokens: llmResponse.usage?.promptTokens || 0,
-          completionTokens: llmResponse.usage?.completionTokens || 0,
-          totalTokens: llmResponse.usage?.totalTokens || 0,
+          promptTokens: 0, // Pas d'info d'usage dans LLMResponse actuel
+          completionTokens: 0,
+          totalTokens: 0,
         },
         metadata: {
           intent,
-          confidence: llmResponse.confidence,
+          confidence: llmResponse.confidence || 0, // Gérer le cas undefined
           citations,
           processingTime,
         },
@@ -259,19 +302,36 @@ const v1ChatRoute: FastifyPluginAsync = async (fastify) => {
     } catch (error) {
       console.error('Chat error:', error);
       
-      return reply.status(500).send({
-        success: false,
-        error: {
-          code: 'CHAT_ERROR',
-          message: 'Erreur lors de la génération de la réponse',
-          details: process.env.NODE_ENV === 'development' ? error : undefined,
+      // Retourner une réponse d'erreur au format ChatResponse
+      const errorResponse: ChatResponse = {
+        id: requestId,
+        object: 'chat.completion',
+        created: Math.floor(Date.now() / 1000),
+        model: 'error',
+        choices: [
+          {
+            index: 0,
+            message: {
+              role: 'assistant',
+              content: 'Je rencontre une difficulté technique. Veuillez réessayer ou contacter un conseiller Sofinco au 0 800 767 000.',
+            },
+            finishReason: 'stop',
+          },
+        ],
+        usage: {
+          promptTokens: 0,
+          completionTokens: 0,
+          totalTokens: 0,
         },
-        meta: {
-          requestId,
-          timestamp: new Date(),
-          tenantId: request.tenantContext?.tenant.id,
+        metadata: {
+          intent: 'error',
+          confidence: 0,
+          citations: [],
+          processingTime: Date.now() - startTime,
         },
-      });
+      };
+      
+      return reply.status(500).send(errorResponse);
     }
   });
 

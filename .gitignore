@@ -18,6 +18,11 @@ build/
 .env.test.local
 .env.production.local
 
+# Firebase credentials - NEVER COMMIT THESE!
+*firebase*adminsdk*.json
+firebase-adminsdk-*.json
+service-account-key.json
+
 # IDE files
 .vscode/
 .idea/
@@ -96,3 +101,4 @@ jspm_packages/
 # Temporary folders
 tmp/
 temp/
+backend/config/firebase-admin-key.json
