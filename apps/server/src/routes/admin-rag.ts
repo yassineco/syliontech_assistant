@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import multipart from '@fastify/multipart';
 import type { MultipartFile } from '@fastify/multipart';
-import { ragDocumentsService, type RagDocument } from '../services/ragDocuments.js';
+import ragDocuments, { type RagDocument } from '../services/ragDocumentsService.js';
 import { fileStorageService } from '../services/fileStorage.js';
 import { ragIngestionService } from '../services/ragIngestion.js';
 
@@ -23,7 +23,7 @@ export default async function adminRagRoutes(fastify: FastifyInstance) {
 
     try {
       // Vérifier si le service RAG est disponible
-      if (!ragDocumentsService.isAvailable()) {
+      if (!ragDocuments.isAvailable()) {
         fastify.log.warn('⚠️ Service RAG Documents non disponible, utilisation fallback');
         
         // Fallback vers des données mock si Firestore n'est pas disponible
@@ -56,7 +56,7 @@ export default async function adminRagRoutes(fastify: FastifyInstance) {
       }
 
       // Utiliser le service réel
-      const documents = await ragDocumentsService.getDocuments(tenantId);
+      const documents = await ragDocuments.getDocuments(tenantId);
       fastify.log.info(`📋 Documents RAG récupérés pour tenant: ${tenantId}, count: ${documents.length}`);
       return documents;
       
@@ -72,7 +72,7 @@ export default async function adminRagRoutes(fastify: FastifyInstance) {
 
     try {
       // Vérifier si le service RAG est disponible
-      if (!ragDocumentsService.isAvailable()) {
+      if (!ragDocuments.isAvailable()) {
         fastify.log.warn('⚠️ Service RAG Documents non disponible, simulation upload');
         
         const fileName = `document_${Date.now()}.pdf`;
@@ -99,18 +99,12 @@ export default async function adminRagRoutes(fastify: FastifyInstance) {
       const fileResult = await fileStorageService.uploadFile(data, tenantId);
 
       // 2. Créer l'entrée document en base
-      const documentId = await ragDocumentsService.createDocument({
-        tenantId,
+      const documentId = await ragDocuments.createDocument(tenantId, {
         fileName: fileResult.originalFileName,
         fileType: fileResult.fileType,
         fileSize: fileResult.fileSize,
         chunks: 0, // Sera mis à jour après ingestion
-        status: 'pending',
-        filePath: fileResult.filePath,
-        metadata: {
-          title: fileResult.originalFileName,
-          description: `Document uploadé par l'admin`,
-        },
+        status: 'processing',
       });
 
       // 3. Lancer l'ingestion asynchrone
@@ -138,32 +132,21 @@ export default async function adminRagRoutes(fastify: FastifyInstance) {
     const { tenantId, documentId } = request.params as { tenantId: string; documentId: string };
 
     try {
-      if (!ragDocumentsService.isAvailable()) {
+      if (!ragDocuments.isAvailable()) {
         fastify.log.warn('⚠️ Service RAG Documents non disponible, simulation suppression');
         fastify.log.info(`🗑️ Suppression simulée - Tenant: ${tenantId}, Document: ${documentId}`);
         return reply.status(204).send();
       }
 
       // Récupérer le document pour obtenir le chemin de fichier
-      const document = await ragDocumentsService.getDocument(tenantId, documentId);
+      const document = await ragDocuments.getDocument(tenantId, documentId);
       
       if (!document) {
         return reply.status(404).send({ error: 'Document non trouvé' });
       }
 
       // Supprimer le document de la base (chunks inclus)
-      await ragDocumentsService.deleteDocument(tenantId, documentId);
-
-      // Supprimer le fichier physique si le chemin existe
-      if (document.filePath) {
-        try {
-          await fileStorageService.deleteFile(document.filePath);
-          fastify.log.info(`✅ Fichier physique supprimé: ${document.filePath}`);
-        } catch (fileError) {
-          fastify.log.warn(`⚠️ Erreur suppression fichier physique: ${fileError}`);
-          // Ne pas échouer la suppression du document pour cela
-        }
-      }
+      await ragDocuments.deleteDocument(tenantId, documentId);
 
       fastify.log.info(`✅ Document supprimé: ${documentId} pour tenant: ${tenantId}`);
       return reply.status(204).send();
@@ -180,11 +163,11 @@ export default async function adminRagRoutes(fastify: FastifyInstance) {
     const { tenantId, documentId } = request.params as { tenantId: string; documentId: string };
 
     try {
-      if (!ragDocumentsService.isAvailable()) {
+      if (!ragDocuments.isAvailable()) {
         return reply.status(503).send({ error: 'Service RAG non disponible' });
       }
 
-      const document = await ragDocumentsService.getDocument(tenantId, documentId);
+      const document = await ragDocuments.getDocument(tenantId, documentId);
       
       if (!document) {
         return reply.status(404).send({ error: 'Document non trouvé' });
@@ -203,18 +186,18 @@ export default async function adminRagRoutes(fastify: FastifyInstance) {
     const { tenantId, documentId } = request.params as { tenantId: string; documentId: string };
 
     try {
-      if (!ragDocumentsService.isAvailable()) {
+      if (!ragDocuments.isAvailable()) {
         return reply.status(503).send({ error: 'Service RAG non disponible' });
       }
 
       // Vérifier que le document existe
-      const document = await ragDocumentsService.getDocument(tenantId, documentId);
+      const document = await ragDocuments.getDocument(tenantId, documentId);
       if (!document) {
         return reply.status(404).send({ error: 'Document non trouvé' });
       }
 
       // Marquer le document comme "processing"
-      await ragDocumentsService.updateDocument(tenantId, documentId, { 
+      await ragDocuments.updateDocument(tenantId, documentId, { 
         status: 'processing' 
       });
 
@@ -240,11 +223,11 @@ export default async function adminRagRoutes(fastify: FastifyInstance) {
     const { tenantId } = request.params as { tenantId: string };
 
     try {
-      if (!ragDocumentsService.isAvailable()) {
+      if (!ragDocuments.isAvailable()) {
         return reply.status(503).send({ error: 'Service RAG non disponible' });
       }
 
-      const documents = await ragDocumentsService.getDocuments(tenantId);
+      const documents = await ragDocuments.getDocuments(tenantId);
       
       const stats = {
         totalDocuments: documents.length,
